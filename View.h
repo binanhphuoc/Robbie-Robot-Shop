@@ -46,6 +46,8 @@ public:
 	void display_all_models();
 	void display_model(int i);
 	void display_error_message(part_t p);
+	string model(int i);
+	string all_models();
 	////////////
 
 	////////////

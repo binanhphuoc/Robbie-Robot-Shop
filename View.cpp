@@ -273,6 +273,16 @@ void View::display_all_models()
 	cout << "---------------------------------------------------------\n\n";
 }
 
+string View::all_models()
+{
+	string output = "";
+	for (int i = 0; i < shop.get_model_size(); i++)
+	{
+		output += "(" + to_string(i) + ") \n" + model(i) + "\n";
+	}
+	return output;
+}
+
 void View::display_model(int i)
 {
 	cout << "Name: " << shop.get_model(i)->get_name() << endl;
@@ -292,6 +302,29 @@ void View::display_model(int i)
 	{
 		cout << "BATTERY " << j+1 << ": " << shop.get_model(i)->get_battery(j)->get_name() << " " << shop.get_model(i)->get_battery(j)->get_model_number() << "\n";
 	}
+}
+
+string View::model(int i)
+{
+	string output = "";
+	output += "Name: " + shop.get_model(i)->get_name() + "\n";
+	output += "Model number: " + to_string(shop.get_model(i)->get_model_number()) + "\n";
+	output += "Price: $" + to_string(shop.get_model(i)->get_price()) + "\n";
+	output += "Weight: " + to_string(shop.get_model(i)->weight()) + " lbs \n";
+	output += "Max speed: " + to_string(shop.get_model(i)->max_speed()) + " mph\n";
+	output += "Battery life: " + to_string(shop.get_model(i)->max_battery_life()) + " hrs\n";
+	output += "HEAD: " + shop.get_model(i)->get_head()->get_name() + " " + to_string(shop.get_model(i)->get_head()->get_model_number()) + "\n";
+	output += "LOCOMOTOR: " + shop.get_model(i)->get_locomotor()->get_name() + " " + to_string(shop.get_model(i)->get_locomotor()->get_model_number()) + "\n";
+	output += "TORSO: " + shop.get_model(i)->get_torso()->get_name() + " " + to_string(shop.get_model(i)->get_torso()->get_model_number()) + "\n";
+	for (int j = 0; j < 2/*shop.get_model(i).get_torso()->get_max_arms()*/; j++)
+	{
+		output += "ARM " + to_string(j+1) + ": " + shop.get_model(i)->get_arm(j)->get_name() + " " + to_string(shop.get_model(i)->get_arm(j)->get_model_number()) + "\n";
+	}
+	for (int j = 0; j < shop.get_model(i)->get_torso()->get_battery_compartments(); j++)
+	{
+		output += "BATTERY " + to_string(j+1) + ": " + shop.get_model(i)->get_battery(j)->get_name() + " " + to_string(shop.get_model(i)->get_battery(j)->get_model_number()) + "\n";
+	}
+	return output;
 }
 
 void View::display_error_message(part_t p)

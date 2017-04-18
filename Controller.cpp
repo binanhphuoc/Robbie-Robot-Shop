@@ -14,6 +14,9 @@
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Input.H>
 #include <FL/fl_ask.H>
+#include <FL/Fl_Scrollbar.H>
+#include <FL/Fl_Text_Display.H>
+#include <FL/Fl_Text_Buffer.H>
 
 using namespace std;
 
@@ -30,8 +33,8 @@ int gui(){
 	win->callback(main0);
 
 	// View
-	Fl_Box* whitebox = new Fl_Box(0,0,X,Y);	
-
+	Fl_Box* whitebox = new Fl_Box(0,0,X,Y);
+	
 	// Install menu bar
 	
 	Fl_Menu_Bar* menubar = new Fl_Menu_Bar(0, 0, X, 30);
@@ -484,8 +487,17 @@ void main4(Fl_Widget* w, void* p)
 
 void main2(Fl_Widget* w, void* p)
 {
-	fl_message_title("ALL ROBOT PARTS");
-	fl_message(view.all_parts().c_str());
+	Fl_Window* win_temp = new Fl_Window{X, Y+150, "Robot Parts List"};
+	win_temp->callback([](Fl_Widget* w, void* p){w->hide();});
+	Fl_Box* whitebox = new Fl_Box(0,0,X,Y+150);
+	Fl_Text_Buffer *buff = new Fl_Text_Buffer();
+    	Fl_Text_Display *disp = new Fl_Text_Display(10, 10, X-10, Y+140);
+    	disp->buffer(buff);
+	buff->text(view.all_parts().c_str());
+	win_temp->end();
+	win_temp->show();
+	//fl_message_title("ALL ROBOT PARTS");
+	//fl_message(view.all_parts().c_str());
 }
 
 void main3()
@@ -499,9 +511,17 @@ void main3()
 		cerr << "Part number " << choice << " is out of bound." << endl;
 }
 
-void main5()
+void main5(Fl_Widget* w, void* p)
 {
-	view.display_all_models();
+	Fl_Window* win_temp = new Fl_Window{X, Y+150, "Robot Models Catalog"};
+	win_temp->callback([](Fl_Widget* w, void* p){w->hide();});
+	Fl_Box* whitebox = new Fl_Box(0,0,X,Y+150);
+	Fl_Text_Buffer *buff = new Fl_Text_Buffer();
+    	Fl_Text_Display *disp = new Fl_Text_Display(10, 10, X-10, Y+140);
+    	disp->buffer(buff);
+	buff->text(view.all_models().c_str());
+	win_temp->end();
+	win_temp->show();
 }
 
 void main6()

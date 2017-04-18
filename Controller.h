@@ -32,7 +32,7 @@ bool check_available();
 void main2(Fl_Widget* w, void* p);
 void main3();
 void main4(Fl_Widget* w, void* p);
-void main5();
+void main5(Fl_Widget* w, void* p);
 void main6();
 void main7();
 void main8();
@@ -44,7 +44,7 @@ void main12();
 
 int X = 400;
 int bsize = 50;
-int Y = 30+bsize;
+int Y = 80+bsize;
 
 Shop shop;
 View view(shop);
@@ -54,11 +54,12 @@ Fl_Menu_Item menuitems[] = {
 		{ "&Exit", FL_ALT + FL_F + 4, main0},
 		{0},
 	{"&Create", 0, 0, 0, FL_SUBMENU},
-		{ "Robot &Component", FL_ALT + 'c', main1},
-		{ "Robot &Model", FL_ALT + 'm', main4},
+		{ "Robot &Component", 0, main1},
+		{ "Robot &Model", 0, main4},
 		{0},
 	{"&View", 0, 0, 0, FL_SUBMENU},
 		{ "Robot &Part", FL_ALT + 'p', main2},
+		{ "Robot &Model", FL_ALT + 'm', main5},
 		{0},
 	{0}
 };
