@@ -5,6 +5,9 @@
 #include "Customer.h"
 #include <iostream>
 #include <string>
+#include <FL/Fl.H>
+#include <FL/Fl_Input.H>
+#include <FL/fl_ask.H>
 
 using namespace std;
 
@@ -128,13 +131,23 @@ void View::display_all_parts()
 	}
 }
 
+string View::all_parts()
+{
+	string output = "";
+	for (int i = 0; i < shop.get_part_size(); i++)
+	{
+		output += display_string_part(i) + "\n";
+	}
+	return output;
+}
+
 Menu View::display_all_parts(part_t p)
 {
 	Menu menu;
 	menu.content = "-----------------------------\n";
 	menu.content += "          ";
 	menu.content += part_string(p);
-	menu.content += " MENU          \n";
+	menu.content += " ROBOT PARTS          \n";
 	menu.content += "-----------------------------\n";
 	
 	int index = 0;
@@ -182,6 +195,7 @@ void View::display_part(int i)
 	if (p == BATTERY)
 	{
 		cout << "Max energy: " << shop.get_part(i)->get_max_energy() << " kWh" << endl;
+		cout << "Power available: " << shop.get_part(i)->get_power() << " W" << endl;
 	}
 	if (p == TORSO)
 	{
@@ -217,6 +231,7 @@ string View::display_string_part(int i)
 	if (p == BATTERY)
 	{
 		result +="Max energy: " +  to_string(shop.get_part(i)->get_max_energy()) + " kWh" +"\n";
+		result +="Power available: " +  to_string(shop.get_part(i)->get_power()) + " W" +"\n";
 	}
 	if (p == TORSO)
 	{
@@ -281,7 +296,8 @@ void View::display_model(int i)
 
 void View::display_error_message(part_t p)
 {
-	cout << "No " << part_string(p) << " available to create robot model." << endl;
+	string msg = "No " + part_string(p) +" available to create robot model.";
+	fl_message(msg.c_str());
 }
 
 ///////////

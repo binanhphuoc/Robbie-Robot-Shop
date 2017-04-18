@@ -16,7 +16,7 @@ void run();
 void save();
 void load();
 
-int get_cmd(Menu menu);
+int get_cmd(Menu menu, string prompt = "");
 bool valid_cmd(string choice, int min, int max, int& ch);
 bool valid_int_input(string input, int& ch);
 bool valid_double_input(string input, double& ch);
@@ -29,9 +29,9 @@ void MainMenuCmd(int cmd);
 void main0(Fl_Widget* w, void* p);
 void main1(Fl_Widget* w, void* p);
 bool check_available();
-void main2();
+void main2(Fl_Widget* w, void* p);
 void main3();
-void main4();
+void main4(Fl_Widget* w, void* p);
 void main5();
 void main6();
 void main7();
@@ -55,6 +55,10 @@ Fl_Menu_Item menuitems[] = {
 		{0},
 	{"&Create", 0, 0, 0, FL_SUBMENU},
 		{ "Robot &Component", FL_ALT + 'c', main1},
+		{ "Robot &Model", FL_ALT + 'm', main4},
+		{0},
+	{"&View", 0, 0, 0, FL_SUBMENU},
+		{ "Robot &Part", FL_ALT + 'p', main2},
 		{0},
 	{0}
 };

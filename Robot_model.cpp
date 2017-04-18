@@ -88,14 +88,20 @@ double Robot_model::weight()
 
 double Robot_model::max_speed()
 {
-	return locomotor->get_max_speed();
+	if (weight() < locomotor->get_weight() * 5)
+		return locomotor->get_max_speed();
+	else
+		return locomotor->get_max_speed() * ( (locomotor->get_weight() * 5) / weight() );
 }
 
 double Robot_model::max_battery_life()
 {
 	double battery_life = 0;
+	double max_energy = 0;
 	for (int i = 0; i < battery.size(); i++)
-		battery_life += battery.at(i)->get_max_energy();
+		max_energy += battery.at(i)->get_max_energy();
+	double ave_power_consumption = head->get_power() + 0.4*(arm.at(0)->get_power() + arm.at(1)->get_power() ) + 0.15 * locomotor->get_power();
+	battery_life = max_energy * 1000 / ave_power_consumption;
 	return battery_life;
 }
 
@@ -135,6 +141,24 @@ Robot_part* Robot_model::get_part(part_t p, int i)
 		return get_locomotor();
 	if (p == BATTERY)
 		return get_battery(i);
+}
+
+bool Robot_model::power_limited()
+{
+	double power_consumption = head->get_power() + locomotor->get_power();
+	for (int i = 0; i < 2; i++)
+	{
+		power_consumption += arm.at(i)->get_power();
+	}
+	double battery_power = 0;
+	for (int i = 0; i < battery.size(); i++)
+	{
+		battery_power += battery.at(i)->get_power();
+	}
+	if (power_consumption > battery_power)
+		return true;
+	else
+		return false;
 }
 
 void Robot_model::save(ofstream& ost, vector<int> var)

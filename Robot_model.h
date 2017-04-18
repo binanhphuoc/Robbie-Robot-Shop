@@ -39,6 +39,7 @@ public:
 	double weight();
 	double max_speed();
 	double max_battery_life();
+	bool power_limited();
 	void save(ofstream& ost, vector<int> var);
 };
 

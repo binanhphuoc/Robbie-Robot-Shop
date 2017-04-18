@@ -112,10 +112,12 @@ class Battery : public Robot_part
 {
 private:
 	double max_energy;
+	double power_available;
 public:
-	Battery(string _name, int _model_number, double _cost, double _weight, string _description, string _image_filename, double _max_energy) : Robot_part(BATTERY, _name, _model_number, _cost, _weight, _description, _image_filename) 
+	Battery(string _name, int _model_number, double _cost, double _weight, string _description, string _image_filename, double _max_energy, double _power_available) : Robot_part(BATTERY, _name, _model_number, _cost, _weight, _description, _image_filename) 
 	{
 		max_energy = _max_energy;
+		power_available = _power_available;
 	}
 	
 	Battery(ifstream& ist)
@@ -126,6 +128,7 @@ public:
 		ist >> max_energy; getline(ist, str);
 	}
 	double get_max_energy() {return max_energy;}
+	double get_power() {return power_available;}
 	void save(ofstream& ost) 
 	{
 		save_part(ost);

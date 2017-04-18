@@ -20,7 +20,7 @@ struct Price
 {
 	double subtotal;
 	double shipping;
-	double tax = 0.15;
+	double tax = 8.25/100;
 /*
 public:
 	Price(double _subtotal, double _shipping, double _tax) : subtotal(_subtotal), shipping(_shipping), tax(_tax) {}

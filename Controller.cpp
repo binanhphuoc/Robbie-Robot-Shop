@@ -89,19 +89,25 @@ void load()
 
 //////----------------------End SAVE AND LOAD----------------------
 
-int get_cmd(Menu menu)
+int get_cmd(Menu menu, string prompt)
 {
-	string choice;
+	const char* choice;
 	int ch;
 	//cout << menu.content;
-	choice = fl_input(menu.content.c_str(),"");
+	string msg = menu.content + "\n" + prompt;
+	choice = fl_input(msg.c_str(),"");
 	//view.ask("Choice: ");
 	//getline(cin, choice);
-	
-	while (!valid_cmd(choice, menu.min, menu.max, ch))
+	if (choice == NULL)
+		return -1;
+	string choice_str = choice;
+	while (!valid_cmd(choice_str, menu.min, menu.max, ch))
 	{	
 		fl_alert("Invalid input. Please try again!\n\n");
 		choice = fl_input(menu.content.c_str(),"");
+		if (choice == NULL)
+			return -1;
+		choice_str = choice;
 	}
 	
 	return ch;
@@ -296,8 +302,9 @@ void main1(Fl_Widget* w, void* pp)
 {
 	//cout << "------------------------CREATE NEW ROBOT PART----------------------------" << endl;
 	int choice;
-
-	choice = get_cmd(view.part_menu());
+	
+	
+	choice = get_cmd(view.part_menu(), "Please select a robot part: ");
 	
 	if (choice == 0)
 	{
@@ -334,6 +341,7 @@ void main1(Fl_Widget* w, void* pp)
 	if (p == BATTERY)
 	{
 		var1 = get_double_input("Max energy: ");
+		var2 = get_double_input("Power available: ");
 	}
 	if (p == TORSO)
 	{
@@ -380,13 +388,12 @@ bool check_available()
 	return available;
 }
 
-void main4()
+void main4(Fl_Widget* w, void* p)
 {
-	cout << "------------------------CREATE NEW ROBOT MODEL----------------------------" << endl;
+	//cout << "------------------------CREATE NEW ROBOT MODEL----------------------------" << endl;
 	if (!check_available())
 	{
-		cout << "Unable to create new model." << endl;
-		cout << "----------------------------------------------------" << endl;
+		fl_message("Unable to create new model.");
 		return;
 	}
 
@@ -397,60 +404,88 @@ void main4()
 	int choice;
 	int cost = 0;
 	Robot_part* current = NULL;
+	bool power_limited = true;
+	double power_consumption = 0, power_available = 0;
 	
-	cout << "Please select HEAD from the following menu:\n\n";
-	choice = get_cmd(view.display_all_parts(HEAD));
-	current = shop.get_part(HEAD, choice);
-	cost += current->get_cost();
-	rp.push_back(current);
-	cout << endl;
-
-	cout << "Please select TORSO from the following menu:\n\n";
-	choice = get_cmd(view.display_all_parts(TORSO));
-	Robot_part* torso = shop.get_part(TORSO, choice);
-	cost += torso->get_cost();
-	rp.push_back(torso);
-	cout << endl;
-
-	cout << "Please select LOCOMOTOR from the following menu:\n\n";
-	choice = get_cmd(view.display_all_parts(LOCOMOTOR));
-	current = shop.get_part(LOCOMOTOR, choice);
-	cost += current->get_cost();
-	rp.push_back(current);
-	cout << endl;
-	
-	for (int i = 0; i < 2/*torso->get_max_arms()*/; i++)
+	while(power_limited)
 	{
-		cout << "Please select ARM " << i+1 << " from the following menu:\n\n";
-		choice = get_cmd(view.display_all_parts(ARM));
-		current = shop.get_part(ARM, choice);
+		power_limited = false;
+
+		choice = get_cmd(view.display_all_parts(HEAD), "Please select HEAD from the following menu:");
+		if (choice == -1)
+			return;
+		current = shop.get_part(HEAD, choice);
 		cost += current->get_cost();
 		rp.push_back(current);
-		cout << endl;
-	}
-	
-	for (int i = 0; i < torso->get_battery_compartments(); i++)
-	{
-		cout << "Please select BATTERY " << i+1 << " from the following menu:\n\n";
-		choice = get_cmd(view.display_all_parts(BATTERY));
-		current = shop.get_part(BATTERY, choice);
+		power_consumption += current->get_power();
+		//cout << endl;
+
+		
+		choice = get_cmd(view.display_all_parts(TORSO), "Please select TORSO from the following menu:");
+		if (choice == -1)
+			return;
+		Robot_part* torso = shop.get_part(TORSO, choice);
+		cost += torso->get_cost();
+		rp.push_back(torso);
+		//cout << endl;
+
+		choice = get_cmd(view.display_all_parts(LOCOMOTOR), "Please select LOCOMOTOR from the following menu:");
+		if (choice == -1)
+			return;
+		current = shop.get_part(LOCOMOTOR, choice);
 		cost += current->get_cost();
 		rp.push_back(current);
-		cout << endl;
-	}
+		power_consumption += current->get_power();
+		//cout << endl;
 	
-	cout << "Total cost of this model is $" << cost << endl;
-	double price = get_double_input("Price: ");
+		for (int i = 0; i < 2/*torso->get_max_arms()*/; i++)
+		{
+			string prompt = "Please select ARM " + to_string(i+1) + " from the following menu:";
+			if (choice == -1)
+				return;
+			choice = get_cmd(view.display_all_parts(ARM), prompt);
+			current = shop.get_part(ARM, choice);
+			cost += current->get_cost();
+			rp.push_back(current);
+			power_consumption += current->get_power();
+			//cout << endl;
+		}
+	
+		for (int i = 0; i < torso->get_battery_compartments(); i++)
+		{
+			string prompt =  "Please select BATTERY " + to_string(i+1) + " from the following menu:";
+			if (choice == -1)
+				return;
+			choice = get_cmd(view.display_all_parts(BATTERY), prompt);
+			current = shop.get_part(BATTERY, choice);
+			cost += current->get_cost();
+			rp.push_back(current);
+			power_available += current->get_power();
+			//cout << endl;
+		}
+		
+		if (power_available < power_consumption)
+		{
+			power_limited = true;
+			cost = 0;
+			power_consumption = 0; power_available = 0;
+			rp.clear();
+			fl_alert("Limited power (from batteries) to support other parts. Please choose again!");
+		}
+	}
+	string msg= "Total cost of this model is $" + to_string(cost) + "\n\nPrice: ";
+	double price = get_double_input(msg);
 	shop.create_new_robot_model(name, model_number, price, rp);
 
-	cout << "Robot model has been created successfully.\n" << endl;
-	cout << "----------------------------------------------------" << endl;	
+	fl_message("Robot model has been created successfully.\n");
+	//cout << "----------------------------------------------------" << endl;	
 	
 }
 
-void main2()
+void main2(Fl_Widget* w, void* p)
 {
-	view.display_all_parts();
+	fl_message_title("ALL ROBOT PARTS");
+	fl_message(view.all_parts().c_str());
 }
 
 void main3()
@@ -566,8 +601,9 @@ void main11()
 	cout << "Subtotal: $" << to_string(price.subtotal) << endl;
 	price.tax = price.tax*price.subtotal;	
 	cout << "Tax: $" << to_string(price.tax) << endl;
-	price.shipping = get_double_input("Shipping: $");
-	
+	price.shipping = 15 * rm->weight() / 100;
+	cout << "Tax: $" << to_string(price.shipping) << endl;
+
 	int choice;
 	choice = get_cmd(view.sales_associates_menu());
 	if (choice == 0)

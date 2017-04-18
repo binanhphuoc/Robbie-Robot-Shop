@@ -28,7 +28,7 @@ void Shop::create_new_robot_part(part_t p, string name, int model_number, double
 	}
 	if (p == BATTERY)
 	{
-		robot_parts.push_back(new Battery(name, model_number, cost, weight, description, image_filename, var1));
+		robot_parts.push_back(new Battery(name, model_number, cost, weight, description, image_filename, var1, var2));
 	}
 	if (p == TORSO)
 	{

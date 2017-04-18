@@ -33,6 +33,7 @@ public:
 	///// 	Robot parts
 	////////////
 	void display_all_parts();
+	string all_parts();
 	Menu display_all_parts(part_t p);
 	void display_part(int i);
 	string display_string_part(int i);
