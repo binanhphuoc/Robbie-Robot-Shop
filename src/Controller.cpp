@@ -3,6 +3,9 @@
 #include "Shop.h"
 #include "View.h"
 #include "Controller.h"
+#include "GUI_Windows.h"
+#include "GUI_MainWin.h"
+#include "Utility.h"
 #include <cstdlib>
 #include <cstring>
 #include <string>
@@ -18,8 +21,10 @@
 #include <FL/Fl_Text_Display.H>
 #include <FL/Fl_Text_Buffer.H>
 
+
 using namespace std;
 
+/*
 int gui(){
 
 	int cmd;
@@ -44,7 +49,7 @@ int gui(){
 	win->show();
 	return (Fl::run());
 	
-}
+}*/
 /*
 void run()
 {
@@ -59,8 +64,10 @@ void run()
 	main0();
 }
 */
+
+
 ////// Save and Load
-void save()
+void Controller::save()
 {
 	ofstream ost("data.txt");
 	if (ost.is_open())
@@ -72,10 +79,14 @@ void save()
 		shop.save_order(ost);
 		ost.close();
 	}
-	else cerr << "Unable to open file for saving.\n";	
+	else 
+	{
+		cerr << "Unable to open file for saving.\n";
+		fl_message("Unable to open file for saving.");
+	}	
 }
 
-void load() 
+void Controller::load() 
 {
 	ifstream ist("data.txt");
 	if (ist.is_open())
@@ -87,133 +98,14 @@ void load()
 		shop.load_order(ist);
 		ist.close();
 	}
-	else cerr << "Unable to open file for loading.\n";
+	else
+	{
+		cerr << "Unable to open file for loading.\n";
+		fl_message("Unable to open file for loading.");
+	}
 }
 
 //////----------------------End SAVE AND LOAD----------------------
-
-int get_cmd(Menu menu, string prompt)
-{
-	const char* choice;
-	int ch;
-	//cout << menu.content;
-	string msg = menu.content + "\n" + prompt;
-	choice = fl_input(msg.c_str(),"");
-	//view.ask("Choice: ");
-	//getline(cin, choice);
-	if (choice == NULL)
-		return -1;
-	string choice_str = choice;
-	while (!valid_cmd(choice_str, menu.min, menu.max, ch))
-	{	
-		fl_alert("Invalid input. Please try again!\n\n");
-		choice = fl_input(menu.content.c_str(),"");
-		if (choice == NULL)
-			return -1;
-		choice_str = choice;
-	}
-	
-	return ch;
-}
-
-bool valid_cmd(string choice, int min, int max, int& ch)
-{
-	if (!valid_int_input(choice, ch))
-	{
-		return false;
-	}	
-	if (ch < min || ch > max)
-	{
-		return false;
-	}
-	else
-		return true;
-}
-
-bool isDigit(char c)
-{
-	if (c == '0' || c == '1'|| c == '2'|| c == '3'|| c == '4'|| c == '5'|| c == '6'|| c == '7'|| c == '8'|| c == '9')
-		return true;
-	return false;
-}
-
-bool valid_int_input(string input, int& ch)
-{
-	const char* str = input.c_str();
-	for (int i = 0; i < strlen(str); i++)
-	{
-		if (!isDigit(str[i]))
-		{
-			ch = 0;
-			return false;
-		}
-	}
-	
-	ch = atoi(str);
-	//cout << "char = " << ch << endl;
-	return true;
-}
-	
-bool valid_double_input(string input, double& ch)
-{
-	const char* str = input.c_str();
-	for (int i = 0; i < strlen(str); i++)
-	{
-		if (!isDigit(str[i]) && str[i] != '.')
-		{
-			ch = 0;
-			return false;
-		}
-	}
-	
-	ch = atof(str);
-	//cout << "char = " << ch << endl;
-	return true;
-}
-
-string get_string_input(string prompt)
-{	
-	string input = fl_input(prompt.c_str());
-	return input;
-}
-
-int get_int_input(string prompt, int min, int max)
-{
-	//view.ask(prompt);
-	string input = fl_input(prompt.c_str());
-	int in;
-	if (min == -1 || max == -1)
-	{
-		while (!valid_int_input(input, in))
-		{
-			fl_alert("Invalid input. Please try again!\n\n");
-			input = fl_input(prompt.c_str());
-		}
-		return in;
-	}
-	else
-	{
-		while (!valid_cmd(input, min, max, in))
-		{
-			string msg = "Input should be a number between " + to_string(min) + " and " + to_string(max) + ". Please try again!\n\n";
-			fl_message(msg.c_str());
-			input = fl_input(prompt.c_str());
-		}
-		return in;
-	}
-}
-
-double get_double_input(string prompt)
-{
-	string input = fl_input(prompt.c_str());
-	double in;
-	while (!valid_double_input(input, in))
-	{
-		fl_alert("Invalid input. Please try again!\n\n");
-		input = fl_input(prompt.c_str());
-	}
-	return in;
-}
 
 //////////////////////////////
 /////////	MAIN MENU
@@ -273,7 +165,7 @@ void MainMenuCmd(int cmd)
 }
 */
 
-void main0(Fl_Widget* w, void* p)
+void Controller::main0()
 {
 	save();	
 
@@ -298,69 +190,92 @@ void main0(Fl_Widget* w, void* p)
 		shop.remove_sales_associate(i);
 	}
 	
-	win->hide();
 }
 
-void main1(Fl_Widget* w, void* pp)
+void Controller::main1()
 {
-	//cout << "------------------------CREATE NEW ROBOT PART----------------------------" << endl;
 	int choice;
 	
-	
-	choice = get_cmd(view.part_menu(), "Please select a robot part: ");
+	choice = Utility::get_cmd(view.part_menu(), "Please select a robot part: ");
 	
 	if (choice == 0)
 	{
-		//cout << "----------------------------------------------------" << endl;
 		return;
 	}
 	
 	part_t p = (part_t) (choice - 1);
 	
-	string name = get_string_input("Name: ");
-	int model_number = get_int_input("Model number: ");
-	double cost = get_double_input("Cost: ");
-	double weight = get_double_input("Weight: ");
-	string description = get_string_input("Description: ");
-	string image_filename = get_string_input("Image filename: ");
+	
+	string name; //= get_string_input("Name: ");
+	int model_number;// = get_int_input("Model number: ");
+	double cost;// = get_double_input("Cost: ");
+	double weight;// = get_double_input("Weight: ");
+	string description;// = get_string_input("Description: ");
+	string image_filename;// = get_string_input("Image filename: ");
+	
+	
+	// Create entries for Input_win
+	vector<const char*> entry;
+	entry.push_back("Name: ");
+	entry.push_back("Model \nnumber: ");
+	entry.push_back("Cost: ");
+	entry.push_back("Weight: ");
+	entry.push_back("Description: ");
+	entry.push_back("Image \nfilename: ");
 
 	double var1 = 0, var2 = 0;
-	
+	int Y = 0;	
+
 	if (p == HEAD)
 	{
-		var1 = get_double_input("Power: ");
+		//var1 = get_double_input("Power: ");
+		entry.push_back("Power: ");
+		Y = 420;
 	}
 
-	if (p == ARM)
+	else if (p == ARM)
 	{
-		var1 = get_double_input("Max power: ");
+		//var1 = get_double_input("Max power: ");
+		entry.push_back("Max \npower: ");
+		Y = 420;
 	}	
 	
-	if (p == LOCOMOTOR)
+	else if (p == LOCOMOTOR)
 	{ 
-		var1 = get_double_input("Max speed: ");
-		var2 = get_double_input("Max power: ");
+		//var1 = get_double_input("Max speed: ");
+		//var2 = get_double_input("Max power: ");
+		entry.push_back("Max \nspeed: ");
+		entry.push_back("Max \npower: ");
+		Y = 480;
 	}
-	if (p == BATTERY)
+	else if (p == BATTERY)
 	{
-		var1 = get_double_input("Max energy: ");
-		var2 = get_double_input("Power available: ");
+		//var1 = get_double_input("Max energy: ");
+		//var2 = get_double_input("Power available: ");
+		entry.push_back("Max \nenergy: ");
+		entry.push_back("Power \navailable: ");
+		Y = 480;
 	}
-	if (p == TORSO)
+	else if (p == TORSO)
 	{
-		var1 = (double) get_int_input("Battery compartments (1 to 3): ", 1, 3);
+		//var1 = (double) get_int_input("Battery compartments (1 to 3): ", 1, 3);
 		/*var2 = get_double_input("Max arms: ");*/
+		entry.push_back("Battery \ncompartments \n(1 to 3): ");
+		Y = 420;
 	}
-
-	//cout << name << " " << model_number << " " << cost << " " << weight << " " << description << " " << image_filename << " " << var1 << " " << var2 << endl;
-	shop.create_new_robot_part(p, name, model_number, cost, weight, description, image_filename, var1, var2);
-	string msg = "Robot part has been created successfully with following details:\n\n" + view.display_string_part(shop.get_part_size()-1);
-	fl_message(msg.c_str());
+	
+	
+	Input_win* input_win = new Input_win(400, Y, "Create Robot Part", entry, shop, PART, &p);
+	
+	
+	//if (valid)		
+	//	input_win->hide();
 	//view.display_part(shop.get_part_size()-1);
 	//cout << "----------------------------------------------------" << endl;
+	//Fl::run();
 }
 
-bool check_available()
+bool Controller::check_available()
 {
 	bool available = true;
 	if (shop.get_part_size(HEAD) == 0)
@@ -391,7 +306,7 @@ bool check_available()
 	return available;
 }
 
-void main4(Fl_Widget* w, void* p)
+void Controller::main4()
 {
 	//cout << "------------------------CREATE NEW ROBOT MODEL----------------------------" << endl;
 	if (!check_available())
@@ -400,8 +315,8 @@ void main4(Fl_Widget* w, void* p)
 		return;
 	}
 
-	string name = get_string_input("Name: ");
-	int model_number = get_int_input("Model number: ");
+	string name = Utility::get_string_input("Name: ");
+	int model_number = Utility::get_int_input("Model number: ");
 	vector<Robot_part*> rp;
 	
 	int choice;
@@ -414,7 +329,7 @@ void main4(Fl_Widget* w, void* p)
 	{
 		power_limited = false;
 
-		choice = get_cmd(view.display_all_parts(HEAD), "Please select HEAD from the following menu:");
+		choice = Utility::get_cmd(view.display_all_parts(HEAD), "Please select HEAD from the following menu:");
 		if (choice == -1)
 			return;
 		current = shop.get_part(HEAD, choice);
@@ -424,7 +339,7 @@ void main4(Fl_Widget* w, void* p)
 		//cout << endl;
 
 		
-		choice = get_cmd(view.display_all_parts(TORSO), "Please select TORSO from the following menu:");
+		choice = Utility::get_cmd(view.display_all_parts(TORSO), "Please select TORSO from the following menu:");
 		if (choice == -1)
 			return;
 		Robot_part* torso = shop.get_part(TORSO, choice);
@@ -432,7 +347,7 @@ void main4(Fl_Widget* w, void* p)
 		rp.push_back(torso);
 		//cout << endl;
 
-		choice = get_cmd(view.display_all_parts(LOCOMOTOR), "Please select LOCOMOTOR from the following menu:");
+		choice = Utility::get_cmd(view.display_all_parts(LOCOMOTOR), "Please select LOCOMOTOR from the following menu:");
 		if (choice == -1)
 			return;
 		current = shop.get_part(LOCOMOTOR, choice);
@@ -446,7 +361,7 @@ void main4(Fl_Widget* w, void* p)
 			string prompt = "Please select ARM " + to_string(i+1) + " from the following menu:";
 			if (choice == -1)
 				return;
-			choice = get_cmd(view.display_all_parts(ARM), prompt);
+			choice = Utility::get_cmd(view.display_all_parts(ARM), prompt);
 			current = shop.get_part(ARM, choice);
 			cost += current->get_cost();
 			rp.push_back(current);
@@ -459,7 +374,7 @@ void main4(Fl_Widget* w, void* p)
 			string prompt =  "Please select BATTERY " + to_string(i+1) + " from the following menu:";
 			if (choice == -1)
 				return;
-			choice = get_cmd(view.display_all_parts(BATTERY), prompt);
+			choice = Utility::get_cmd(view.display_all_parts(BATTERY), prompt);
 			current = shop.get_part(BATTERY, choice);
 			cost += current->get_cost();
 			rp.push_back(current);
@@ -477,7 +392,7 @@ void main4(Fl_Widget* w, void* p)
 		}
 	}
 	string msg= "Total cost of this model is $" + to_string(cost) + "\n\nPrice: ";
-	double price = get_double_input(msg);
+	double price = Utility::get_double_input(msg);
 	shop.create_new_robot_model(name, model_number, price, rp);
 
 	fl_message("Robot model has been created successfully.\n");
@@ -485,13 +400,13 @@ void main4(Fl_Widget* w, void* p)
 	
 }
 
-void main2(Fl_Widget* w, void* p)
+void Controller::main2()
 {
-	Fl_Window* win_temp = new Fl_Window{X, Y+150, "Robot Parts List"};
+	Fl_Window* win_temp = new Fl_Window{200, 200, "Robot Parts List"};
 	win_temp->callback([](Fl_Widget* w, void* p){w->hide();});
-	Fl_Box* whitebox = new Fl_Box(0,0,X,Y+150);
+	Fl_Box* whitebox = new Fl_Box(0,0,200,200);
 	Fl_Text_Buffer *buff = new Fl_Text_Buffer();
-    	Fl_Text_Display *disp = new Fl_Text_Display(10, 10, X-10, Y+140);
+    	Fl_Text_Display *disp = new Fl_Text_Display(10, 10, 190, 340);
     	disp->buffer(buff);
 	buff->text(view.all_parts().c_str());
 	win_temp->end();
@@ -500,79 +415,79 @@ void main2(Fl_Widget* w, void* p)
 	//fl_message(view.all_parts().c_str());
 }
 
-void main3()
+void Controller::main3()
 {
 	int choice;
-	choice = get_cmd(view.yesno_menu("Are you sure you want to remove robot part? Any robot model associated with this part will also be removed."));
+	choice = Utility::get_cmd(view.yesno_menu("Are you sure you want to remove robot part? Any robot model associated with this part will also be removed."));
 	if (choice == 0)
 		return;
-	choice = get_int_input("Part number: ");
+	choice = Utility::get_int_input("Part number: ");
 	if (shop.remove_robot_part(choice) == 1)
 		cerr << "Part number " << choice << " is out of bound." << endl;
 }
 
-void main5(Fl_Widget* w, void* p)
+void Controller::main5()
 {
-	Fl_Window* win_temp = new Fl_Window{X, Y+150, "Robot Models Catalog"};
+	Fl_Window* win_temp = new Fl_Window{200, 200, "Robot Models Catalog"};
 	win_temp->callback([](Fl_Widget* w, void* p){w->hide();});
-	Fl_Box* whitebox = new Fl_Box(0,0,X,Y+150);
+	Fl_Box* whitebox = new Fl_Box(0,0,200,200);
 	Fl_Text_Buffer *buff = new Fl_Text_Buffer();
-    	Fl_Text_Display *disp = new Fl_Text_Display(10, 10, X-10, Y+140);
+    	Fl_Text_Display *disp = new Fl_Text_Display(10, 10, 190, 340);
     	disp->buffer(buff);
 	buff->text(view.all_models().c_str());
 	win_temp->end();
 	win_temp->show();
 }
 
-void main6()
+void Controller::main6()
 {
-	int choice = get_int_input("Model number: ");
+	int choice = Utility::get_int_input("Model number: ");
 	if (shop.remove_robot_model(choice) == 1)
 		cerr << "Model number " << choice << " is out of bound." << endl;
 }
 
-void main7()
+void Controller::main7()
 {
 	cout << "----------------------------------------" << endl;
 	cout << "	    CREATE NEW CUSTOMER		 " << endl;
 	cout << "----------------------------------------" << endl;
-	string name = get_string_input("Name: ");
-	int customer_number = get_int_input("Customer number: ");
-	string phone_number = get_string_input("Phone number: ");
-	string email_address = get_string_input("Email address: ");
+	string name = Utility::get_string_input("Name: ");
+	int customer_number = Utility::get_int_input("Customer number: ");
+	string phone_number = Utility::get_string_input("Phone number: ");
+	string email_address = Utility::get_string_input("Email address: ");
 	
 	shop.create_new_customer(name, customer_number, phone_number, email_address);
 
 }
 
-void main8()
+void Controller::main8()
 {
 	cout << "----------------------------------------" << endl;
 	cout << "	 VIEW CUSTOMER INFORMATION	 " << endl;
 	cout << "----------------------------------------" << endl;
 	
-	int choice = get_cmd(view.customers_menu());
+	int choice = Utility::get_cmd(view.customers_menu());
 	while(choice != 0)
 	{
 		cout << view.display_customer(choice-1) << endl;
 		cout << "----------------------------------------" << endl;
-		choice = get_cmd(view.customers_menu());
+		choice = Utility::get_cmd(view.customers_menu());
 	}
 	cout << "----------------------------------------" << endl;
 }
 
-void main9()
+void Controller::main9()
 {
 	cout << "----------------------------------------" << endl;
 	cout << "	CREATE NEW SALES ASSOCIATE	 " << endl;
 	cout << "----------------------------------------" << endl;
-	string name = get_string_input("Name: ");
-	int employee_number = get_int_input("Employee number: ");
+	string name = Utility::get_string_input("Name: ");
+	int employee_number = Utility::get_int_input("Employee number: ");
 	
 	shop.create_new_sales_associate(name, employee_number);
 }
 
-void main10()
+void Controller::main10()
 {
 	cout << "----------------------------------------" << endl;
 	cout << "	   SALES ASSOCIATE LIST		 " << endl;
@@ -583,35 +498,35 @@ void main10()
 }
 
 
-void main11()
+void Controller::main11()
 {
 	cout << "----------------------------------------" << endl;
 	cout << "	    CREATE NEW ORDER		 " << endl;
 	cout << "----------------------------------------" << endl;
 	
-	int order_number = get_int_input("Order number: ");
+	int order_number = Utility::get_int_input("Order number: ");
 	
 	int choice1; 
 	
 	int choice2 = 0;
 	while(choice2 == 0)
 	{	
-		choice1 = get_cmd(view.pick_model_menu());
+		choice1 = Utility::get_cmd(view.pick_model_menu());
 		while (choice1 == 1)
 		{
-			choice2 = get_cmd(view.model_menu());
+			choice2 = Utility::get_cmd(view.model_menu());
 			while (choice2 != 0)
 			{
 				view.display_model(choice2-1);
-				choice2 = get_cmd(view.model_menu());
+				choice2 = Utility::get_cmd(view.model_menu());
 			}
-			choice1 = get_cmd(view.pick_model_menu());
+			choice1 = Utility::get_cmd(view.pick_model_menu());
 		}
 	
 		if (choice1 == 0)
 			return;
 		
-		choice2 = get_cmd(view.model_menu());
+		choice2 = Utility::get_cmd(view.model_menu());
 	}
 
 	Robot_model* rm = shop.get_model(choice2-1); 
@@ -625,12 +540,12 @@ void main11()
 	cout << "Tax: $" << to_string(price.shipping) << endl;
 
 	int choice;
-	choice = get_cmd(view.sales_associates_menu());
+	choice = Utility::get_cmd(view.sales_associates_menu());
 	if (choice == 0)
 		return;
 	Sales_associate* sa = shop.get_sales_associate(choice-1);
 	
-	choice = get_cmd(view.customers_menu());
+	choice = Utility::get_cmd(view.customers_menu());
 	if (choice == 0)
 		return;
 	Customer* c = shop.get_customer(choice-1);
@@ -639,16 +554,16 @@ void main11()
 	cout << "----------------------------------------" << endl;
 }
 
-void main12()
+void Controller::main12()
 {
-	int choice = get_cmd(view.orders_menu());
+	int choice = Utility::get_cmd(view.orders_menu());
 	string temp;
 	while(choice != 0)
 	{
 		cout << view.display_order(choice-1) << endl;
 		cout << "Press Enter to continue" << endl;
 		getline(cin, temp);
-		choice = get_cmd(view.orders_menu());
+		choice = Utility::get_cmd(view.orders_menu());
 	}
 }
 
@@ -663,5 +578,9 @@ void main12()
 
 int main()
 {
-	return(gui());
+	Shop sh;
+	View v(sh);
+	Controller c(sh, v);
+	run_main_win(400, 300, "Robbie Robot Shop", c);
+	return 0;
 }
