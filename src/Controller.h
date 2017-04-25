@@ -14,6 +14,7 @@ class Controller
 {
 public:
 	Controller(Shop& sh, View& v) : shop(sh), view(v) {}
+	void run();
 
 	////// Save and Load
 	void save();

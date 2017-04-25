@@ -10,11 +10,23 @@ debug: exe
 
 rebuild: clean exe
 
-exe: controller.o view.o shop.o order.o robotmodel.o
-	$(CXX) $(CXXFLAGS) $(fltk-config --cxxflags) -o exe controller.o view.o shop.o order.o robotmodel.o $(LDFLAGS)
+exe: controller.o view.o shop.o order.o robotmodel.o guiwin.o guimainwin.o utility.o main.o
+	$(CXX) $(CXXFLAGS) $(fltk-config --cxxflags) -o exe controller.o view.o shop.o order.o robotmodel.o guiwin.o guimainwin.o utility.o main.o $(LDFLAGS)
 
-controller.o: Controller.cpp Controller.h view.o
+main.o: main.cpp
+	$(CXX) -c $(CXXFLAGS) $(fltk-config --cxxflags) -o main.o main.cpp
+
+guimainwin.o: GUI_MainWin.cpp GUI_MainWin.h controller.o utility.o
+	$(CXX) -c $(CXXFLAGS) $(fltk-config --cxxflags) -o guimainwin.o GUI_MainWin.cpp
+
+utility.o: Utility.cpp Utility.h Robot_part.h
+	$(CXX) -c $(CXXFLAGS) $(fltk-config --cxxflags) -o utility.o Utility.cpp
+
+controller.o: Controller.cpp Controller.h view.o guiwin.o
 	$(CXX) -c $(CXXFLAGS) $(fltk-config --cxxflags) -o controller.o Controller.cpp
+
+guiwin.o: GUI_Windows.cpp GUI_Windows.h
+	$(CXX) -c $(CXXFLAGS) $(fltk-config --cxxflags) -o guiwin.o GUI_Windows.cpp
 
 view.o: View.cpp View.h shop.o
 	$(CXX) -c $(CXXFLAGS) $(fltk-config --cxxflags) -o view.o View.cpp

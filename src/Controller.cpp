@@ -24,12 +24,14 @@
 
 using namespace std;
 
-/*
-int gui(){
+
+void Controller::run(){
 
 	int cmd;
 	load();
-
+	
+	GUI_MainWin* main_win = new GUI_MainWin(400, 300, "Robbie Robot Shop", *this);
+/*
 	// Create a window
 	win = new Fl_Window{X, Y, "Robbie Robot Shop"};
 	win->color(FL_WHITE);
@@ -44,27 +46,13 @@ int gui(){
 	
 	Fl_Menu_Bar* menubar = new Fl_Menu_Bar(0, 0, X, 30);
 	menubar->menu(menuitems);
-	
+
 	win->end();
 	win->show();
-	return (Fl::run());
-	
-}*/
-/*
-void run()
-{
-	int cmd;
-	load();
-	cmd = get_cmd(view.main_menu());
-	while(cmd != 0)
-	{
-		MainMenuCmd(cmd);
-		cmd = get_cmd(view.main_menu());
-	}
-	main0();
-}
-*/
 
+	return (Fl::run());*/
+	
+}
 
 ////// Save and Load
 void Controller::save()
@@ -402,13 +390,14 @@ void Controller::main4()
 
 void Controller::main2()
 {
-	Fl_Window* win_temp = new Fl_Window{200, 200, "Robot Parts List"};
+	Fl_Window* win_temp = new Fl_Window{200, 350, "Robot Parts List"};
 	win_temp->callback([](Fl_Widget* w, void* p){w->hide();});
-	Fl_Box* whitebox = new Fl_Box(0,0,200,200);
+	//Fl_Box* whitebox = new Fl_Box(0,0,200,200);
 	Fl_Text_Buffer *buff = new Fl_Text_Buffer();
-    	Fl_Text_Display *disp = new Fl_Text_Display(10, 10, 190, 340);
+    	Fl_Text_Display *disp = new Fl_Text_Display(5, 5, 190, 340);
     	disp->buffer(buff);
 	buff->text(view.all_parts().c_str());
+	win_temp->resizable(*disp);
 	win_temp->end();
 	win_temp->show();
 	//fl_message_title("ALL ROBOT PARTS");
@@ -570,17 +559,3 @@ void Controller::main12()
 //////////////////////////////
 //////////////////////////////
 //////////////////////////////
-
-
-//////////////////////////////
-/////		MAIN
-//////////////////////////////
-
-int main()
-{
-	Shop sh;
-	View v(sh);
-	Controller c(sh, v);
-	run_main_win(400, 300, "Robbie Robot Shop", c);
-	return 0;
-}

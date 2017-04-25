@@ -17,7 +17,7 @@ GUI_MainWin::GUI_MainWin(int w, int h, const char* title, Controller& _c) : Fl_W
 	begin();
 	color(FL_WHITE);
 	
-	callback(main0);
+	callback(main0, this);
 
 	whitebox = new Fl_Box(0,0,400,300);
 	
@@ -59,10 +59,14 @@ void GUI_MainWin::main1(Fl_Widget* w, void* p)
 
 void GUI_MainWin::main4(Fl_Widget* w, void* p)
 {
+	
 }
+
 void GUI_MainWin::main2(Fl_Widget* w, void* p)
 {
+	((GUI_MainWin*)p)->c.main2();
 }
+
 void GUI_MainWin::main5(Fl_Widget* w, void* p)
 {
 }

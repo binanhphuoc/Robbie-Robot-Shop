@@ -139,6 +139,7 @@ bool Utility::valid_input_part(vector<string> input, part_t p, vector<double>& o
 	{
 		if (!valid_double_input(input.at(6), var1))
 		{
+			output.clear();		
 			valid = false;
 			return valid;
 		}
@@ -152,6 +153,7 @@ bool Utility::valid_input_part(vector<string> input, part_t p, vector<double>& o
 	{ 
 		if (!valid_double_input(input.at(6), var1) || !valid_double_input(input.at(7), var2))
 		{
+			output.clear();	
 			valid = false;
 			return valid;		
 		}
@@ -169,6 +171,7 @@ bool Utility::valid_input_part(vector<string> input, part_t p, vector<double>& o
 		if (!valid_cmd(input.at(6), 1, 3, var) )
 			/*|| !valid_double_input(input.at(7), var2))*/
 		{
+			output.clear();	
 			valid = false;
 			return valid;
 		}
