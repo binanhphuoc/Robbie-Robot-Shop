@@ -25,8 +25,8 @@ utility.o: Utility.cpp Utility.h Robot_part.h
 controller.o: Controller.cpp Controller.h view.o guiwin.o
 	$(CXX) -c $(CXXFLAGS) $(fltk-config --cxxflags) -o controller.o Controller.cpp
 
-guiwin.o: GUI_Windows.cpp GUI_Windows.h
-	$(CXX) -c $(CXXFLAGS) $(fltk-config --cxxflags) -o guiwin.o GUI_Windows.cpp
+guiwin.o: GUI_Dialog.cpp GUI_Dialog.h
+	$(CXX) -c $(CXXFLAGS) $(fltk-config --cxxflags) -o guiwin.o GUI_Dialog.cpp
 
 view.o: View.cpp View.h shop.o
 	$(CXX) -c $(CXXFLAGS) $(fltk-config --cxxflags) -o view.o View.cpp

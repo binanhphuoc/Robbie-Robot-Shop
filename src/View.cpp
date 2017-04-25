@@ -150,7 +150,7 @@ Menu View::display_all_parts(part_t p)
 	menu.content += " ROBOT PARTS          \n";
 	menu.content += "-----------------------------\n";
 	
-	int index = 0;
+	int index = 1;
 	for (int i = 0; i < shop.get_part_size(); i++)
 	{
 		if (shop.get_part(i)->get_part() == p)
@@ -327,10 +327,10 @@ string View::model(int i)
 	return output;
 }
 
-void View::display_error_message(part_t p)
+string View::display_error_message(part_t p)
 {
 	string msg = "No " + part_string(p) +" available to create robot model.";
-	fl_message(msg.c_str());
+	return msg;
 }
 
 ///////////

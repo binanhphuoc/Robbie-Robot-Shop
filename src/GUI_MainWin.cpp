@@ -59,7 +59,7 @@ void GUI_MainWin::main1(Fl_Widget* w, void* p)
 
 void GUI_MainWin::main4(Fl_Widget* w, void* p)
 {
-	
+	((GUI_MainWin*)p)->c.main4();
 }
 
 void GUI_MainWin::main2(Fl_Widget* w, void* p)
@@ -69,4 +69,5 @@ void GUI_MainWin::main2(Fl_Widget* w, void* p)
 
 void GUI_MainWin::main5(Fl_Widget* w, void* p)
 {
+	((GUI_MainWin*)p)->c.main5();
 }

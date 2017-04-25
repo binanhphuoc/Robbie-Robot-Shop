@@ -3,7 +3,7 @@
 #include "Shop.h"
 #include "View.h"
 #include "Controller.h"
-#include "GUI_Windows.h"
+#include "GUI_Dialog.h"
 #include "GUI_MainWin.h"
 #include "Utility.h"
 #include <cstdlib>
@@ -266,30 +266,36 @@ void Controller::main1()
 bool Controller::check_available()
 {
 	bool available = true;
+	string error_msg = "";
 	if (shop.get_part_size(HEAD) == 0)
 	{
-		view.display_error_message(HEAD);
+		error_msg += view.display_error_message(HEAD) + "\n";
 		available = false;
 	}
 	if (shop.get_part_size(TORSO) == 0)
 	{
-		view.display_error_message(TORSO);
+		error_msg += view.display_error_message(TORSO) + "\n";
 		available = false;
 	}
 	if (shop.get_part_size(LOCOMOTOR) == 0)
 	{
-		view.display_error_message(LOCOMOTOR);
+		error_msg += view.display_error_message(LOCOMOTOR)+ "\n";
 		available = false;
 	}
 	if (shop.get_part_size(ARM) == 0)
 	{
-		view.display_error_message(ARM);
+		error_msg += view.display_error_message(ARM)+ "\n";
 		available = false;
 	}
 	if (shop.get_part_size(BATTERY) == 0)
 	{
-		view.display_error_message(BATTERY);
+		error_msg += view.display_error_message(BATTERY)+ "\n";
 		available = false;
+	}
+	if (!available)
+	{
+		error_msg += "Unable to create new model.";
+		fl_message(error_msg.c_str());
 	}
 	return available;
 }
@@ -299,10 +305,12 @@ void Controller::main4()
 	//cout << "------------------------CREATE NEW ROBOT MODEL----------------------------" << endl;
 	if (!check_available())
 	{
-		fl_message("Unable to create new model.");
 		return;
 	}
 
+	vector<const char*> entry;
+	entry.push_back("Name: ");
+	entry.push_back("Model number: ");
 	string name = Utility::get_string_input("Name: ");
 	int model_number = Utility::get_int_input("Model number: ");
 	vector<Robot_part*> rp;
@@ -318,9 +326,9 @@ void Controller::main4()
 		power_limited = false;
 
 		choice = Utility::get_cmd(view.display_all_parts(HEAD), "Please select HEAD from the following menu:");
-		if (choice == -1)
+		if (choice == 0)
 			return;
-		current = shop.get_part(HEAD, choice);
+		current = shop.get_part(HEAD, choice-1);
 		cost += current->get_cost();
 		rp.push_back(current);
 		power_consumption += current->get_power();
@@ -328,17 +336,17 @@ void Controller::main4()
 
 		
 		choice = Utility::get_cmd(view.display_all_parts(TORSO), "Please select TORSO from the following menu:");
-		if (choice == -1)
+		if (choice == 0)
 			return;
-		Robot_part* torso = shop.get_part(TORSO, choice);
+		Robot_part* torso = shop.get_part(TORSO, choice-1);
 		cost += torso->get_cost();
 		rp.push_back(torso);
 		//cout << endl;
 
 		choice = Utility::get_cmd(view.display_all_parts(LOCOMOTOR), "Please select LOCOMOTOR from the following menu:");
-		if (choice == -1)
+		if (choice == 0)
 			return;
-		current = shop.get_part(LOCOMOTOR, choice);
+		current = shop.get_part(LOCOMOTOR, choice-1);
 		cost += current->get_cost();
 		rp.push_back(current);
 		power_consumption += current->get_power();
@@ -347,10 +355,10 @@ void Controller::main4()
 		for (int i = 0; i < 2/*torso->get_max_arms()*/; i++)
 		{
 			string prompt = "Please select ARM " + to_string(i+1) + " from the following menu:";
-			if (choice == -1)
+			if (choice == 0)
 				return;
 			choice = Utility::get_cmd(view.display_all_parts(ARM), prompt);
-			current = shop.get_part(ARM, choice);
+			current = shop.get_part(ARM, choice-1);
 			cost += current->get_cost();
 			rp.push_back(current);
 			power_consumption += current->get_power();
@@ -360,10 +368,10 @@ void Controller::main4()
 		for (int i = 0; i < torso->get_battery_compartments(); i++)
 		{
 			string prompt =  "Please select BATTERY " + to_string(i+1) + " from the following menu:";
-			if (choice == -1)
+			if (choice == 0)
 				return;
 			choice = Utility::get_cmd(view.display_all_parts(BATTERY), prompt);
-			current = shop.get_part(BATTERY, choice);
+			current = shop.get_part(BATTERY, choice-1);
 			cost += current->get_cost();
 			rp.push_back(current);
 			power_available += current->get_power();
@@ -390,11 +398,11 @@ void Controller::main4()
 
 void Controller::main2()
 {
-	Fl_Window* win_temp = new Fl_Window{200, 350, "Robot Parts List"};
+	Fl_Window* win_temp = new Fl_Window{300, 350, "Robot Parts List"};
 	win_temp->callback([](Fl_Widget* w, void* p){w->hide();});
 	//Fl_Box* whitebox = new Fl_Box(0,0,200,200);
 	Fl_Text_Buffer *buff = new Fl_Text_Buffer();
-    	Fl_Text_Display *disp = new Fl_Text_Display(5, 5, 190, 340);
+    	Fl_Text_Display *disp = new Fl_Text_Display(5, 5, 290, 340);
     	disp->buffer(buff);
 	buff->text(view.all_parts().c_str());
 	win_temp->resizable(*disp);
@@ -417,11 +425,11 @@ void Controller::main3()
 
 void Controller::main5()
 {
-	Fl_Window* win_temp = new Fl_Window{200, 200, "Robot Models Catalog"};
+	Fl_Window* win_temp = new Fl_Window{300, 350, "Robot Models Catalog"};
 	win_temp->callback([](Fl_Widget* w, void* p){w->hide();});
 	Fl_Box* whitebox = new Fl_Box(0,0,200,200);
 	Fl_Text_Buffer *buff = new Fl_Text_Buffer();
-    	Fl_Text_Display *disp = new Fl_Text_Display(10, 10, 190, 340);
+    	Fl_Text_Display *disp = new Fl_Text_Display(5, 5, 290, 340);
     	disp->buffer(buff);
 	buff->text(view.all_models().c_str());
 	win_temp->end();

@@ -21,14 +21,14 @@ int Utility::get_cmd(Menu menu, string prompt)
 	//view.ask("Choice: ");
 	//getline(cin, choice);
 	if (choice == NULL)
-		return -1;
+		return 0;
 	string choice_str = choice;
 	while (!valid_cmd(choice_str, menu.min, menu.max, ch))
 	{	
 		fl_alert("Invalid input. Please try again!\n\n");
 		choice = fl_input(menu.content.c_str(),"");
 		if (choice == NULL)
-			return -1;
+			return 0;
 		choice_str = choice;
 	}
 	
