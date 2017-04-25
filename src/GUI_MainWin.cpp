@@ -5,6 +5,8 @@
 #include <FL/Fl_Output.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Menu_Bar.H>
+#include <FL/Fl_PNG_Image.H>
+#include <FL/Fl_JPEG_Image.H>
 #include "Controller.h"
 
 void run_main_win(int w, int h, const char* title, Controller& _c)
@@ -19,8 +21,10 @@ GUI_MainWin::GUI_MainWin(int w, int h, const char* title, Controller& _c) : Fl_W
 	
 	callback(main0, this);
 
-	whitebox = new Fl_Box(0,0,400,300);
-	
+	whitebox = new Fl_Box(0,30,400,300);
+	Fl_JPEG_Image* background = new Fl_JPEG_Image("Robot_Images/full_button_can.jpg");
+	whitebox->image(background);
+
 	// Install menu bar
 
 	Fl_Menu_Item menuitems[] = { 
@@ -41,6 +45,7 @@ GUI_MainWin::GUI_MainWin(int w, int h, const char* title, Controller& _c) : Fl_W
 	menubar = new Fl_Menu_Bar(0, 0, 400, 30);
 	menubar->menu(menuitems);
 	
+	resizable(*whitebox);
 	end();
 	show();
 	Fl::run();

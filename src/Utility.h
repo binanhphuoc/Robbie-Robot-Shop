@@ -7,12 +7,12 @@
 
 using namespace std;
 
-enum Object{PART, MODEL, SA, BC, ORDER};
+enum Object{PART, MODEL, SA, BC, ORDER, NONE};
 
 class Utility
 {
 public:
-	static int get_cmd(Menu menu, string prompt = "");
+	static int get_cmd(Menu menu, string prompt = "", string title = "");
 	static bool valid_cmd(string choice, int min, int max, int& ch);
 	static bool valid_int_input(string input, int& ch);
 	static bool valid_double_input(string input, double& ch);

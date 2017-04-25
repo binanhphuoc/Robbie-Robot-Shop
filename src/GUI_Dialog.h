@@ -18,7 +18,7 @@ vector<string> run_input_win(int w, int h, const char* title, vector<const char*
 class Input_win : public Fl_Window
 {
 public:
-	Input_win(int w, int h, const char* title, vector<const char*> entry, Shop& sh, Object o, void* p1 = NULL);
+	Input_win(int w, int h, const char* title, vector<const char*> entry, Shop& sh, View& v, Object o, void* p1 = NULL);
 	vector<Fl_Input*> input;
 	Fl_Button* create;
 	Fl_Button* cancel;
@@ -28,12 +28,12 @@ public:
 	void* get_ptr();
 
 	void* p1;
-	
+	Object o;
+	Shop& shop;
+	View& view;
 
 private:
 	vector<string> output;
-	Object o;
-	Shop& shop;
 	bool changed = false;
 
 	static void cb_cancel(Fl_Widget* w, void* p);

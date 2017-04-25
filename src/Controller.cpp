@@ -184,7 +184,7 @@ void Controller::main1()
 {
 	int choice;
 	
-	choice = Utility::get_cmd(view.part_menu(), "Please select a robot part: ");
+	choice = Utility::get_cmd(view.part_menu(), "Please select a robot part: ", "Create Robot Part");
 	
 	if (choice == 0)
 	{
@@ -253,7 +253,7 @@ void Controller::main1()
 	}
 	
 	
-	Input_win* input_win = new Input_win(400, Y, "Create Robot Part", entry, shop, PART, &p);
+	Input_win* input_win = new Input_win(300, Y, "Create Robot Part", entry, shop, view, PART, &p);
 	
 	
 	//if (valid)		
@@ -310,88 +310,11 @@ void Controller::main4()
 
 	vector<const char*> entry;
 	entry.push_back("Name: ");
-	entry.push_back("Model number: ");
-	string name = Utility::get_string_input("Name: ");
-	int model_number = Utility::get_int_input("Model number: ");
-	vector<Robot_part*> rp;
+	entry.push_back("Model \nnumber: ");
+	//string name = Utility::get_string_input("Name: ");
+	//int model_number = Utility::get_int_input("Model number: ");
 	
-	int choice;
-	int cost = 0;
-	Robot_part* current = NULL;
-	bool power_limited = true;
-	double power_consumption = 0, power_available = 0;
-	
-	while(power_limited)
-	{
-		power_limited = false;
-
-		choice = Utility::get_cmd(view.display_all_parts(HEAD), "Please select HEAD from the following menu:");
-		if (choice == 0)
-			return;
-		current = shop.get_part(HEAD, choice-1);
-		cost += current->get_cost();
-		rp.push_back(current);
-		power_consumption += current->get_power();
-		//cout << endl;
-
-		
-		choice = Utility::get_cmd(view.display_all_parts(TORSO), "Please select TORSO from the following menu:");
-		if (choice == 0)
-			return;
-		Robot_part* torso = shop.get_part(TORSO, choice-1);
-		cost += torso->get_cost();
-		rp.push_back(torso);
-		//cout << endl;
-
-		choice = Utility::get_cmd(view.display_all_parts(LOCOMOTOR), "Please select LOCOMOTOR from the following menu:");
-		if (choice == 0)
-			return;
-		current = shop.get_part(LOCOMOTOR, choice-1);
-		cost += current->get_cost();
-		rp.push_back(current);
-		power_consumption += current->get_power();
-		//cout << endl;
-	
-		for (int i = 0; i < 2/*torso->get_max_arms()*/; i++)
-		{
-			string prompt = "Please select ARM " + to_string(i+1) + " from the following menu:";
-			if (choice == 0)
-				return;
-			choice = Utility::get_cmd(view.display_all_parts(ARM), prompt);
-			current = shop.get_part(ARM, choice-1);
-			cost += current->get_cost();
-			rp.push_back(current);
-			power_consumption += current->get_power();
-			//cout << endl;
-		}
-	
-		for (int i = 0; i < torso->get_battery_compartments(); i++)
-		{
-			string prompt =  "Please select BATTERY " + to_string(i+1) + " from the following menu:";
-			if (choice == 0)
-				return;
-			choice = Utility::get_cmd(view.display_all_parts(BATTERY), prompt);
-			current = shop.get_part(BATTERY, choice-1);
-			cost += current->get_cost();
-			rp.push_back(current);
-			power_available += current->get_power();
-			//cout << endl;
-		}
-		
-		if (power_available < power_consumption)
-		{
-			power_limited = true;
-			cost = 0;
-			power_consumption = 0; power_available = 0;
-			rp.clear();
-			fl_alert("Limited power (from batteries) to support other parts. Please choose again!");
-		}
-	}
-	string msg= "Total cost of this model is $" + to_string(cost) + "\n\nPrice: ";
-	double price = Utility::get_double_input(msg);
-	shop.create_new_robot_model(name, model_number, price, rp);
-
-	fl_message("Robot model has been created successfully.\n");
+	Input_win* input_win = new Input_win(300, 170, "Create Robot Model", entry, shop, view, MODEL);
 	//cout << "----------------------------------------------------" << endl;	
 	
 }
@@ -432,6 +355,7 @@ void Controller::main5()
     	Fl_Text_Display *disp = new Fl_Text_Display(5, 5, 290, 340);
     	disp->buffer(buff);
 	buff->text(view.all_models().c_str());
+	win_temp->resizable(*disp);
 	win_temp->end();
 	win_temp->show();
 }

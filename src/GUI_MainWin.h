@@ -6,6 +6,7 @@
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Output.H>
 #include <FL/Fl_Button.H>
+#include <FL/Fl_JPEG_Image.H>
 #include "Controller.h"
 
 void run_main_win(int w, int h, const char* title, Controller& _c);

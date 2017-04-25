@@ -11,12 +11,13 @@ using namespace std;
 ////////		UTILITY
 //////////////////////////////////
 
-int Utility::get_cmd(Menu menu, string prompt)
+int Utility::get_cmd(Menu menu, string prompt, string title)
 {
 	const char* choice;
 	int ch;
 	//cout << menu.content;
 	string msg = menu.content + "\n" + prompt;
+	fl_message_title(title.c_str());
 	choice = fl_input(msg.c_str(),"");
 	//view.ask("Choice: ");
 	//getline(cin, choice);
