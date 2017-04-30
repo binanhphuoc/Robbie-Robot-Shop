@@ -204,6 +204,15 @@ void View::display_part(int i)
 	}
 }
 
+string View::display_string_part_title(int i)
+{
+	part_t p = shop.get_part(i)->get_part();
+	string result = "(" + part_string(p) + ") ";
+	result += shop.get_part(i)->get_name() + " ";
+	result += to_string(shop.get_part(i)->get_model_number());
+	return result;
+}
+
 string View::display_string_part(int i)
 {
 	part_t p = shop.get_part(i)->get_part();
@@ -237,6 +246,36 @@ string View::display_string_part(int i)
 	{
 		result +="Battery compartments: " +  to_string(shop.get_part(i)->get_battery_compartments()) + "\n";
 		//result +="Max arms: " +  to_string(shop.get_part(i)->get_max_arms()) + "\n";
+	}
+	return result;
+}
+
+vector<string> View::vector_all_part_title()
+{
+	vector<string> result;
+	for (int i = 0; i < shop.get_part_size(); i++)
+	{
+		result.push_back(display_string_part_title(i));
+	}
+	return result;
+}
+
+vector<string> View::vector_all_part_details()
+{
+	vector<string> result;
+	for (int i = 0; i < shop.get_part_size(); i++)
+	{
+		result.push_back(display_string_part(i));
+	}
+	return result;
+}
+
+vector<string> View::vector_all_part_image()
+{
+	vector<string> result;
+	for (int i = 0; i < shop.get_part_size(); i++)
+	{
+		result.push_back(shop.get_part(i)->get_image_filename());
 	}
 	return result;
 }

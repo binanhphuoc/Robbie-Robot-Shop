@@ -6,6 +6,7 @@
 #include "GUI_Dialog.h"
 #include "GUI_MainWin.h"
 #include "Utility.h"
+#include "Dialog_manager.h"
 #include <cstdlib>
 #include <cstring>
 #include <string>
@@ -321,6 +322,8 @@ void Controller::main4()
 
 void Controller::main2()
 {
+	Display_part_dialog dp(view);
+/*
 	Fl_Window* win_temp = new Fl_Window{300, 350, "Robot Parts List"};
 	win_temp->callback([](Fl_Widget* w, void* p){w->hide();});
 	//Fl_Box* whitebox = new Fl_Box(0,0,200,200);
@@ -331,6 +334,7 @@ void Controller::main2()
 	win_temp->resizable(*disp);
 	win_temp->end();
 	win_temp->show();
+*/
 	//fl_message_title("ALL ROBOT PARTS");
 	//fl_message(view.all_parts().c_str());
 }

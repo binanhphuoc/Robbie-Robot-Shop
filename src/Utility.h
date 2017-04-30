@@ -4,6 +4,12 @@
 #include "View.h"
 #include <string>
 #include <vector>
+#include <FL/Fl.H>
+#include <FL/Fl_Shared_Image.H>
+#include <FL/Fl_PNG_Image.H>
+#include <FL/Fl_JPEG_Image.H>
+#include <FL/Fl_Image.H>
+#include <FL/Fl_Box.H>
 
 using namespace std;
 
@@ -23,6 +29,10 @@ public:
 	static int get_int_input(string prompt, int min = -1, int max = -1);
 	static double get_double_input(string prompt);
 	static bool isDigit(char c);
+	
+	static void scale_image(Fl_Box* box, Fl_JPEG_Image* img);
+	static void scale_image(Fl_Box* box, Fl_PNG_Image* img);
+	static int check_image(string filename);
 };
 
 #endif

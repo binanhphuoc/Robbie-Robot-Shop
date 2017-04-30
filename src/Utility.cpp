@@ -27,6 +27,7 @@ int Utility::get_cmd(Menu menu, string prompt, string title)
 	while (!valid_cmd(choice_str, menu.min, menu.max, ch))
 	{	
 		fl_alert("Invalid input. Please try again!\n\n");
+		fl_message_title(title.c_str());
 		choice = fl_input(menu.content.c_str(),"");
 		if (choice == NULL)
 			return 0;
@@ -231,6 +232,72 @@ double Utility::get_double_input(string prompt)
 	return in;
 }
 
+void Utility::scale_image(Fl_Box* box, Fl_JPEG_Image* img)
+{
+	if (!img) {
+	    return; 
+	}
+	
+	
+	// Resize the image if it's too big, by replacing it with a resized copy:
+	if (img->w() > box->w() || img->h() > box->h()) {
+	
+	    Fl_Image *temp;
+	/*
+	    if (img->w() > img->h()) {
+		temp = img->copy(box->w(), box->h() * img->h() / img->w());
+	    } else {
+		temp = img->copy(box->w() * img->w() / img->h(), box->h());
+	    }
+	*/
+	    temp = img->copy(box->w(), box->h());
+	    delete img;
+	    img = (Fl_JPEG_Image *) temp;
+	}
+	
+	// Assign image to box
+	box->image(img);
+	box->redraw();
+}
+
+void Utility::scale_image(Fl_Box* box, Fl_PNG_Image* img)
+{
+	if (!img) {
+	    return; 
+	}
+
+	// Resize the image if it's too big, by replacing it with a resized copy:
+	if (img->w() != box->w() || img->h() != box->h()) {
+	    Fl_Image *temp;
+	/*
+	    if (img->w() > img->h()) {
+		temp = img->copy(box->w(), box->h() * img->h() / img->w());
+	    } else {
+		temp = img->copy(box->w() * img->w() / img->h(), box->h());
+	    }
+	*/
+	    temp = img->copy(box->w(), box->h());
+	    delete img;
+	    img = (Fl_PNG_Image *) temp;
+	}
+	
+	// Assign image to box
+	box->image(img);
+	box->redraw();
+}
+
+int Utility::check_image(string filename)
+{
+	if(filename.substr(filename.find_last_of(".") + 1) == "png")
+	{
+		return 1;
+	}
+	if(filename.substr(filename.find_last_of(".") + 1) == "jpg")
+	{
+		return 2;
+	}
+	return 0;
+}
 
 ////////////////////
 ///-----------------------------------End UTILITY------------------------

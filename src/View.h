@@ -37,6 +37,10 @@ public:
 	Menu display_all_parts(part_t p);
 	void display_part(int i);
 	string display_string_part(int i);
+	string display_string_part_title(int i);
+	vector<string> vector_all_part_title();
+	vector<string> vector_all_part_details();
+	vector<string> vector_all_part_image();
 	string part_string(part_t p);
 	////////////
 
