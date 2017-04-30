@@ -50,8 +50,8 @@ void Controller::run(){
 
 	win->end();
 	win->show();
-
-	return (Fl::run());*/
+*/
+	//Fl::run();
 	
 }
 

@@ -9,7 +9,8 @@
 
 Display_part_dialog::Display_part_dialog(View& v) : view(v)
 {
-	browser = new Browser_dialog("View Robot Parts", v.vector_all_part_title(), v.vector_all_part_image(), v.vector_all_part_details(), browserCB, this);
+	vCB.push_back(browserCB);
+	browser = new Browser_dialog("View Robot Parts", v.vector_all_part_title(), v.vector_all_part_image(), v.vector_all_part_details(), vCB, this);
 	Fl::run();
 }
 

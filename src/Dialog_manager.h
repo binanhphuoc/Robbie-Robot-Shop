@@ -17,6 +17,8 @@ public:
 	Display_part_dialog(View& v);
 	Browser_dialog* browser;
 	View& view;
+	
+	vector<Fl_Callback*> vCB;
 
 	static void browserCB(Fl_Widget* w, void* p);
 };

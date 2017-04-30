@@ -15,6 +15,7 @@
 #include <iostream>
 #include <exception>
 
+/*
 Browser_dialog::Browser_dialog(const char* title, vector<string> item, vector<string> _image_filename, vector<string> _details, Fl_Callback* CBfunction, void* _Dialog_Manager) : Fl_Window(500, 480, title), image_filename{_image_filename}, details(_details), functionCB{CBfunction}, Dialog_Manager{_Dialog_Manager}
 {
 	begin();
@@ -25,20 +26,6 @@ Browser_dialog::Browser_dialog(const char* title, vector<string> item, vector<st
 	browser->callback(browserCB, this);
 	
 	box = new Fl_Box(260, 205, 230, 230);
-	/*
-	Fl_JPEG_Image* img =new Fl_JPEG_Image(image_filename.at(7).c_str());
-	//img->release();
-	if (img->w() > box->w() || img->h() > box->h()) {
-	    Fl_Image *temp;
-	    if (img->w() > img->h()) {
-		temp = img->copy(box->w(), box->h() * img->h() / img->w());
-	    } else {
-		temp = img->copy(box->w() * img->w() / img->h(), box->h());
-	    }
-	    img = (Fl_JPEG_Image *) temp;
-	}
-	box->image(img);
-	*/
 
 	buff = new Fl_Text_Buffer();
     	disp = new Fl_Text_Display(260, 10, 230, 185);
@@ -46,6 +33,32 @@ Browser_dialog::Browser_dialog(const char* title, vector<string> item, vector<st
 
 	next = new Fl_Button(160, 440, 80, 30, "Next");
 	next->callback(functionCB, Dialog_Manager);
+
+	cancel = new Fl_Button(260, 440, 80, 30, "Cancel");
+	cancel->callback(cancelCB, this);
+	end();
+	show();
+}
+*/
+
+Browser_dialog::Browser_dialog(const char* title, vector<string> item, vector<string> _image_filename, vector<string> _details, vector<Fl_Callback*> CBfunction, void* _Dialog_Manager) : Fl_Window(500, 480, title), image_filename{_image_filename}, details(_details), vCB{CBfunction}, Dialog_Manager{_Dialog_Manager}
+{
+	begin();
+	callback(cancelCB, this);
+	browser = new Fl_Hold_Browser(10, 10, 240, 420);
+	for (int i = 0; i < item.size(); i++)
+		browser->add(item.at(i).c_str());
+	browser->callback(browserCB, this);
+	
+	box = new Fl_Box(260, 205, 230, 230);
+
+	buff = new Fl_Text_Buffer();
+    	disp = new Fl_Text_Display(260, 10, 230, 185);
+	disp->buffer(buff);
+
+	next = new Fl_Button(160, 440, 80, 30, "Next");
+	next->callback(vCB.at(0), Dialog_Manager);
+	vCB.erase(vCB.begin());
 
 	cancel = new Fl_Button(260, 440, 80, 30, "Cancel");
 	cancel->callback(cancelCB, this);
