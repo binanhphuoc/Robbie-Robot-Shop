@@ -123,6 +123,7 @@ bool Utility::valid_double_input(string input, double& ch)
 
 bool Utility::valid_input_part(vector<string> input, part_t p, vector<double>& output)
 {
+	output.clear();
 	bool valid = true;
 	int model_number;
 	double cost, weight, var1, var2;

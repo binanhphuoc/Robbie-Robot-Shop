@@ -100,60 +100,6 @@ void Controller::load()
 /////////	MAIN MENU
 //////////////////////////////
 
-/*
-void MainMenuCmd(int cmd)
-{
-	if (cmd == 1)
-	{
-		main1();
-	}
-	else if (cmd == 2)
-	{
-		main2();
-	}
-	else if (cmd == 3)
-	{
-		main3();
-	}
-	else if (cmd == 4)
-	{
-		main4();
-	}
-	else if (cmd == 5)
-	{
-		main5();
-	}
-	else if (cmd == 6)
-	{
-		main6();
-	}
-	else if (cmd == 7)
-	{
-		main7();
-	}
-	else if (cmd == 8)
-	{
-		main8();
-	}
-	else if (cmd == 9)
-	{
-		main9();
-	}
-	else if (cmd == 10)
-	{
-		main10();
-	}
-	else if (cmd == 11)
-	{
-		main11();
-	}
-	else if (cmd == 12)
-	{
-		main12();
-	}
-}
-*/
-
 void Controller::main0()
 {
 	save();	
@@ -181,8 +127,11 @@ void Controller::main0()
 	
 }
 
+
 void Controller::main1()
 {
+	Create_part_dialog cp(shop, view);
+	/*
 	int choice;
 	
 	choice = Utility::get_cmd(view.part_menu(), "Please select a robot part: ", "Create Robot Part");
@@ -248,21 +197,15 @@ void Controller::main1()
 	else if (p == TORSO)
 	{
 		//var1 = (double) get_int_input("Battery compartments (1 to 3): ", 1, 3);
-		/*var2 = get_double_input("Max arms: ");*/
+		//var2 = get_double_input("Max arms: ");
 		entry.push_back("Battery \ncompartments \n(1 to 3): ");
 		Y = 420;
 	}
 	
-	
 	Input_win* input_win = new Input_win(300, Y, "Create Robot Part", entry, shop, view, PART, &p);
-	
-	
-	//if (valid)		
-	//	input_win->hide();
-	//view.display_part(shop.get_part_size()-1);
-	//cout << "----------------------------------------------------" << endl;
-	//Fl::run();
+	*/
 }
+
 
 bool Controller::check_available()
 {
