@@ -379,6 +379,14 @@ void View::display_model(int i)
 	}
 }
 
+string View::model_title(int i)
+{
+	string output = "";
+	output += shop.get_model(i)->get_name() + " ";
+	output += to_string(shop.get_model(i)->get_model_number());
+	return output;
+}
+
 string View::model(int i)
 {
 	string output = "";
@@ -400,6 +408,36 @@ string View::model(int i)
 		output += "BATTERY " + to_string(j+1) + ": " + shop.get_model(i)->get_battery(j)->get_name() + " " + to_string(shop.get_model(i)->get_battery(j)->get_model_number()) + "\n";
 	}
 	return output;
+}
+
+vector<string> View::vector_all_model_title()
+{
+	vector<string> result;
+	for (int i = 0; i < shop.get_model_size(); i++)
+	{
+		result.push_back(model_title(i));
+	}
+	return result;
+}
+
+vector<string> View::vector_all_model_details()
+{
+	vector<string> result;
+	for (int i = 0; i < shop.get_model_size(); i++)
+	{
+		result.push_back(model(i));
+	}
+	return result;
+}
+
+vector<string> View::vector_all_model_image()
+{
+	vector<string> result;
+	for (int i = 0; i < shop.get_model_size(); i++)
+	{
+		result.push_back(shop.get_model(i)->get_image_filename());
+	}
+	return result;
 }
 
 string View::display_error_message(part_t p)

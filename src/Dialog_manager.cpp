@@ -29,7 +29,7 @@ void Display_part_dialog::browserCB(Fl_Widget* w, void* p)
 ////	DISPLAY MODEL DIALOG
 ///////////////
 
-/*
+
 Display_model_dialog::Display_model_dialog(View& v) : view(v)
 {
 	vCB.push_back(browserCB);
@@ -42,7 +42,7 @@ void Display_model_dialog::browserCB(Fl_Widget* w, void* p)
 	Display_part_dialog* dialog = (Display_part_dialog*) p;
 	dialog->browser->hide();
 }
-*/
+
 
 ///////////////
 /////-------------------End DISPLAY PART DIALOG----------------------

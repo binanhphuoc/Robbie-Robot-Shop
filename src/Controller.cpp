@@ -224,6 +224,7 @@ void Controller::main3()
 
 void Controller::main5()
 {
+	/*
 	Fl_Window* win_temp = new Fl_Window{300, 350, "Robot Models Catalog"};
 	win_temp->callback([](Fl_Widget* w, void* p){w->hide();});
 	Fl_Box* whitebox = new Fl_Box(0,0,200,200);
@@ -234,6 +235,9 @@ void Controller::main5()
 	win_temp->resizable(*disp);
 	win_temp->end();
 	win_temp->show();
+	*/
+	
+	Display_model_dialog dmd(view);
 }
 
 void Controller::main6()

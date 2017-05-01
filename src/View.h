@@ -53,7 +53,11 @@ public:
 	void display_all_models();
 	void display_model(int i);
 	string display_error_message(part_t p);
+	string model_title(int i);
 	string model(int i);
+	vector<string> vector_all_model_title();
+	vector<string> vector_all_model_details();
+	vector<string> vector_all_model_image();
 	string all_models();
 	////////////
 
