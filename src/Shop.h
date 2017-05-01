@@ -11,6 +11,8 @@
 #include <iostream>
 #include <fstream>
 
+enum Roll{PM, BC, SA, PB};
+
 using namespace std;
 
 class Shop
@@ -57,7 +59,7 @@ public:
 	/////------------End CUSTOMERS---------------	
 
 	///// SALES ASSOCIATE
-	void create_new_sales_associate(string name, int employee_number);
+	void create_new_sales_associate(string name, int employee_number, string username, string password);
 	Sales_associate* get_sales_associate(int i);
 	int get_sales_associate_size();
 	int remove_sales_associate(int i);

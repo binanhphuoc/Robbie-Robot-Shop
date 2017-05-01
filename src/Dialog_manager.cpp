@@ -372,3 +372,66 @@ void Create_model_dialog::batteryDialogCB(Fl_Widget* w, void* p)
 ///////////////
 ////----------------------End CREATE MODEL DIALOG----------------------
 ///////////////
+
+///////////////
+////		CREATE SALES ASSOCIATE
+///////////////
+
+Create_sa_dialog::Create_sa_dialog(Shop& sh, Roll r) : shop(sh), roll(r)
+{
+	vector<const char*> item;
+	item.push_back("Name: ");
+	item.push_back("Employee \nnumber: ");
+
+	vCB.push_back(infoCB);
+	vCB.push_back(passCB);	
+
+	infoDialog = new Input_dialog("Create sales associate", item, vCB, this);
+	Fl::run();
+}
+
+void Create_sa_dialog::infoCB(Fl_Widget* w, void* p)
+{
+	Create_sa_dialog* cd = (Create_sa_dialog*) p;
+	Input_dialog* dialog = cd->infoDialog;
+
+	int employee_number;
+	if (!Utility::valid_int_input(dialog->input.at(1)->value(), employee_number))
+	{
+		fl_message("Invalid model number.");
+		return;
+	}
+	
+	cd->name = dialog->input.at(0)->value();
+	cd->employee_number = employee_number;
+
+	dialog->hide();
+	cd->passDialog = new Create_account_dialog("New sales associate", cd->vCB, cd);
+}
+
+void Create_sa_dialog::passCB(Fl_Widget* w, void* p)
+{
+	Create_sa_dialog* cd = (Create_sa_dialog*) p;
+	Create_account_dialog* dialog = cd->passDialog;
+	
+	string password = dialog->password->value();
+	string confirm = dialog->confirm->value();
+	if (password != confirm)
+	{
+		fl_message("Please confirm your password again.");
+		return;
+	}
+	
+	cd->username = dialog->username->value();
+	cd->password = password;
+
+	cd->shop.create_new_sales_associate(cd->name, cd->employee_number, cd->username, cd->password);
+	
+	if (cd->roll == PB)
+		cd->shop.get_sales_associate(cd->shop.get_sales_associate_size() - 1)->set_active(true);
+
+	dialog->hide();
+	fl_message("Sales associate has been created.");
+}
+
+/////-----------------------------------------------------------------

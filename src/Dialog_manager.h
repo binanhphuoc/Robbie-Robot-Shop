@@ -5,6 +5,7 @@
 #include "Browser_dialog.h"
 #include "Utility.h"
 #include "Input_dialog.h"
+#include "Create_account_dialog.h"
 #include "Browser_dialog.h"
 #include "View.h"
 #include "Shop.h"
@@ -18,6 +19,11 @@
 #include <FL/fl_ask.H>
 
 using namespace std;
+
+////////////////////
+/////		LOGIN DIALOG
+////////////////////
+
 
 ////////////////////
 ////		DISPLAY PART DIALOG
@@ -115,5 +121,35 @@ public:
 };
 
 /////---------------------------------------------------------
+
+/////////////////
+//////		CREATE SALES ASSOCIATE DIALOG
+/////////////////
+
+class Create_sa_dialog
+{
+public:
+	Create_sa_dialog(Shop& sh, Roll r);
+	Input_dialog* infoDialog;
+	Create_account_dialog* passDialog;
+	
+	Shop& shop;
+	Roll roll;
+	vector<Fl_Callback*> vCB;
+
+	string name;
+	int employee_number;
+	string username;
+	string password;
+
+	///// Callbacks
+
+	static void infoCB(Fl_Widget* w, void* p);
+	static void passCB(Fl_Widget* w, void* p);
+	
+};
+
+/////---------------------------------------------------------
+
 
 #endif

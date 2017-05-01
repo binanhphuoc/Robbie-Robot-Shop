@@ -31,25 +31,7 @@ void Controller::run(){
 	load();
 	
 	GUI_MainWin* main_win = new GUI_MainWin(400, 300, "Robbie Robot Shop", *this);
-/*
-	// Create a window
-	win = new Fl_Window{X, Y, "Robbie Robot Shop"};
-	win->color(FL_WHITE);
-	
-	// Sign up for callback
-	win->callback(main0);
 
-	// View
-	Fl_Box* whitebox = new Fl_Box(0,0,X,Y);
-	
-	// Install menu bar
-	
-	Fl_Menu_Bar* menubar = new Fl_Menu_Bar(0, 0, X, 30);
-	menubar->menu(menuitems);
-
-	win->end();
-	win->show();
-*/
 	//Fl::run();
 	
 }
@@ -279,6 +261,7 @@ void Controller::main8()
 
 void Controller::main9()
 {
+/*
 	cout << "----------------------------------------" << endl;
 	cout << "	CREATE NEW SALES ASSOCIATE	 " << endl;
 	cout << "----------------------------------------" << endl;
@@ -286,6 +269,8 @@ void Controller::main9()
 	int employee_number = Utility::get_int_input("Employee number: ");
 	
 	shop.create_new_sales_associate(name, employee_number);
+*/
+	Create_sa_dialog* cd = new Create_sa_dialog(shop, PB);
 }
 
 void Controller::main10()

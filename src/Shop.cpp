@@ -382,9 +382,9 @@ void Shop::load_customer(ifstream& ist)
 /////	SALES ASSOCIATE
 /////////////////
 
-void Shop::create_new_sales_associate(string name, int employee_number)
+void Shop::create_new_sales_associate(string name, int employee_number, string username, string password)
 {
-	sales_associates.push_back(new Sales_associate(name, employee_number));
+	sales_associates.push_back(new Sales_associate(name, employee_number, username, password));
 }
 
 Sales_associate* Shop::get_sales_associate(int i)
@@ -423,7 +423,10 @@ void Shop::save_sales_associate(ofstream& ost)
 	{
 		Sales_associate* c = sales_associates.at(i);
 		ost << c->get_name() << endl;
-		ost << c->get_employee_number() << endl;	
+		ost << c->get_employee_number() << endl;
+		ost << c->get_username() << endl;
+		ost << c->get_password() << endl;
+		ost << (int) ((c->get_active())?1:0) << endl;	
 	}
 }
 
@@ -439,7 +442,17 @@ void Shop::load_sales_associate(ifstream& ist)
 		int employee_number;
 		ist >> employee_number; getline(ist, str);
 		
-		create_new_sales_associate(name, employee_number);
+		string username;
+		getline(ist, username);
+
+		string password;
+		getline(ist, password);
+	
+		int active;
+		ist >> active; getline(ist, str);
+		
+		create_new_sales_associate(name, employee_number, username, password);
+		get_sales_associate(get_sales_associate_size()-1)->set_active((bool)active);
 	}
 }
 
