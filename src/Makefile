@@ -10,14 +10,17 @@ debug: exe
 
 rebuild: clean exe
 
-exe: controller.o view.o shop.o order.o robotmodel.o guimainwin.o utility.o main.o dialogmanager.o browserdialog.o inputdialog.o
-	$(CXX) $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o exe controller.o view.o shop.o order.o robotmodel.o guimainwin.o utility.o main.o inputdialog.o dialogmanager.o browserdialog.o  $(LDFLAGS)
+exe: controller.o view.o shop.o order.o robotmodel.o guimainwin.o utility.o main.o dialogmanager.o browserdialog.o inputdialog.o createaccountdialog.o
+	$(CXX) $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o exe controller.o view.o shop.o order.o robotmodel.o guimainwin.o utility.o main.o inputdialog.o dialogmanager.o browserdialog.o createaccountdialog.o $(LDFLAGS)
 
 main.o: main.cpp
 	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o main.o main.cpp
 
 dialogmanager.o: Dialog_manager.cpp Dialog_manager.h
 	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o dialogmanager.o Dialog_manager.cpp
+
+createaccountdialog.o: Create_account_dialog.cpp Create_account_dialog.h
+	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o createaccountdialog.o Create_account_dialog.cpp
 
 inputdialog.o: Input_dialog.cpp Input_dialog.h
 	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o inputdialog.o Input_dialog.cpp
