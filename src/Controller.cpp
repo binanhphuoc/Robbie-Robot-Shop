@@ -131,79 +131,6 @@ void Controller::main0()
 void Controller::main1()
 {
 	Create_part_dialog cp(shop, view);
-	/*
-	int choice;
-	
-	choice = Utility::get_cmd(view.part_menu(), "Please select a robot part: ", "Create Robot Part");
-	
-	if (choice == 0)
-	{
-		return;
-	}
-	
-	part_t p = (part_t) (choice - 1);
-	
-	
-	string name; //= get_string_input("Name: ");
-	int model_number;// = get_int_input("Model number: ");
-	double cost;// = get_double_input("Cost: ");
-	double weight;// = get_double_input("Weight: ");
-	string description;// = get_string_input("Description: ");
-	string image_filename;// = get_string_input("Image filename: ");
-	
-	
-	// Create entries for Input_win
-	vector<const char*> entry;
-	entry.push_back("Name: ");
-	entry.push_back("Model \nnumber: ");
-	entry.push_back("Cost: ");
-	entry.push_back("Weight: ");
-	entry.push_back("Description: ");
-	entry.push_back("Image \nfilename: ");
-
-	double var1 = 0, var2 = 0;
-	int Y = 0;	
-
-	if (p == HEAD)
-	{
-		//var1 = get_double_input("Power: ");
-		entry.push_back("Power: ");
-		Y = 420;
-	}
-
-	else if (p == ARM)
-	{
-		//var1 = get_double_input("Max power: ");
-		entry.push_back("Max \npower: ");
-		Y = 420;
-	}	
-	
-	else if (p == LOCOMOTOR)
-	{ 
-		//var1 = get_double_input("Max speed: ");
-		//var2 = get_double_input("Max power: ");
-		entry.push_back("Max \nspeed: ");
-		entry.push_back("Max \npower: ");
-		Y = 480;
-	}
-	else if (p == BATTERY)
-	{
-		//var1 = get_double_input("Max energy: ");
-		//var2 = get_double_input("Power available: ");
-		entry.push_back("Max \nenergy: ");
-		entry.push_back("Power \navailable: ");
-		Y = 480;
-	}
-	else if (p == TORSO)
-	{
-		//var1 = (double) get_int_input("Battery compartments (1 to 3): ", 1, 3);
-		//var2 = get_double_input("Max arms: ");
-		entry.push_back("Battery \ncompartments \n(1 to 3): ");
-		Y = 420;
-	}
-	
-	Input_win* input_win = new Input_win(300, Y, "Create Robot Part", entry, shop, view, PART, &p);
-	*/
 }
 
 
@@ -252,6 +179,7 @@ void Controller::main4()
 		return;
 	}
 
+/*
 	vector<const char*> entry;
 	entry.push_back("Name: ");
 	entry.push_back("Model \nnumber: ");
@@ -260,7 +188,9 @@ void Controller::main4()
 	
 	Input_win* input_win = new Input_win(300, 170, "Create Robot Model", entry, shop, view, MODEL);
 	//cout << "----------------------------------------------------" << endl;	
-	
+*/
+	Create_model_dialog md(shop, view);
+
 }
 
 void Controller::main2()

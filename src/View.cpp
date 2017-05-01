@@ -280,6 +280,42 @@ vector<string> View::vector_all_part_image()
 	return result;
 }
 
+vector<string> View::vector_all_part_title(part_t p)
+{
+	vector<string> result;
+	for (int i = 0; i < shop.get_part_size(); i++)
+	{
+		if (shop.get_part(i)->get_part() != p)
+			continue;
+		result.push_back(display_string_part_title(i));
+	}
+	return result;
+}
+
+vector<string> View::vector_all_part_details(part_t p)
+{
+	vector<string> result;
+	for (int i = 0; i < shop.get_part_size(); i++)
+	{
+		if (shop.get_part(i)->get_part() != p)
+			continue;
+		result.push_back(display_string_part(i));
+	}
+	return result;
+}
+
+vector<string> View::vector_all_part_image(part_t p)
+{
+	vector<string> result;
+	for (int i = 0; i < shop.get_part_size(); i++)
+	{
+		if (shop.get_part(i)->get_part() != p)
+			continue;
+		result.push_back(shop.get_part(i)->get_image_filename());
+	}
+	return result;
+}
+
 string View::part_string(part_t p)
 {
 	if (p == ARM)

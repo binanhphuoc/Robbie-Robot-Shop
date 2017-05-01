@@ -16,12 +16,12 @@ using namespace std;
 class Input_dialog : public Fl_Window
 {
 public:
-	Input_dialog(const char* title, vector<const char*> entry, vector<Fl_Callback*> _fxCB, void* _Dialog_manager);
+	Input_dialog(const char* title, vector<const char*> entry, vector<Fl_Callback*>& _fxCB, void* _Dialog_manager);
 	vector<Fl_Input*> input;
 	Fl_Button* create;
 	Fl_Button* cancel;
 	void* Dialog_manager;
-	vector<Fl_Callback*> fxCB;
+	vector<Fl_Callback*>& fxCB;
 
 private:
 	static void cb_cancel(Fl_Widget* w, void* p);

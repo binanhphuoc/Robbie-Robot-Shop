@@ -41,6 +41,9 @@ public:
 	vector<string> vector_all_part_title();
 	vector<string> vector_all_part_details();
 	vector<string> vector_all_part_image();
+	vector<string> vector_all_part_title(part_t p);
+	vector<string> vector_all_part_details(part_t p);
+	vector<string> vector_all_part_image(part_t p);
 	string part_string(part_t p);
 	////////////
 

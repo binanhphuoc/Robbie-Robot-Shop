@@ -31,8 +31,6 @@ Input_win::Input_win(int w, int h, const char* title, vector<const char*> entry,
 	else if (o == MODEL)
 		create = new Fl_Button(70, y, 70, 30, "Next");
 	
-	if (o == PART)
-		create->callback(cb_create_part, this);
 	if (o == MODEL)
 		create->callback(cb_create_model, this);
 
@@ -53,26 +51,6 @@ void Input_win::cb_cancel(Fl_Widget* w, void* p)
 void Input_win::cb_cancel_i()
 {
 	hide();
-}
-
-void Input_win::cb_create_part(Fl_Widget* w, void* p)
-{
-	Input_win* win  = (Input_win*) p;
-	win->cb_create_i();
-	part_t pt = *( (part_t*)((Input_win*)p)->p1);
-	vector<double> output;
-	vector<string> org_output = ((Input_win*) p)->get_output();
-	if (!Utility::valid_input_part(org_output, pt, output))
-	{
-		fl_message("Invalid input. Please try again!");
-	}
-	else
-	{
-		win->shop.create_new_robot_part(pt, org_output.at(0), (int) output.at(0), output.at(1), output.at(2), org_output.at(4), org_output.at(5), output.at(3), output.at(4));
-		string msg = "Robot part has been created successfull\n\n"/* + view.display_string_part(shop.get_part_size()-1)*/;
-		fl_message(msg.c_str());
-		cb_cancel(w, p);
-	}
 }
 
 void Input_win::cb_create_model(Fl_Widget* w, void* p)

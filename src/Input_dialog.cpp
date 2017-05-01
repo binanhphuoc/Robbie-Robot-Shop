@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-Input_dialog::Input_dialog(const char* title, vector<const char*> entry, vector<Fl_Callback*> _fxCB, void* _Dialog_manager) : Fl_Window(300, 60 * entry.size(), title), fxCB{_fxCB}, Dialog_manager{_Dialog_manager}
+Input_dialog::Input_dialog(const char* title, vector<const char*> entry, vector<Fl_Callback*>& _fxCB, void* _Dialog_manager) : Fl_Window(300, 50 * entry.size() + 60, title), fxCB{_fxCB}, Dialog_manager{_Dialog_manager}
 {
 	begin();
 	int y = -30;
@@ -20,7 +20,7 @@ Input_dialog::Input_dialog(const char* title, vector<const char*> entry, vector<
 		input.push_back(in);
 	}
 	
-	y += 50;
+	y += 45;
 	
 	create = new Fl_Button(70, y, 70, 30, "Create");
 	create->callback(fxCB.at(0), Dialog_manager);

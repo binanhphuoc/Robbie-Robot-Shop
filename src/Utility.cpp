@@ -92,35 +92,6 @@ bool Utility::valid_double_input(string input, double& ch)
 	return true;
 }
 
-/*bool Utility::valid_input(vector<string> input, Object o, void* p)
-{
-	if (o == PART)
-	{
-		return valid_input_part(input, *((part_t*) p));
-	}
-	
-	if (o == MODEL)
-	{
-	}
-
-	if (o == SA)
-	{
-	}
-	
-	if (o == BC)
-	{
-	}
-	
-	if (o == ORDER)
-	{
-	}
-	
-	if (valid)
-	{
-		
-	}
-}*/
-
 bool Utility::valid_input_part(vector<string> input, part_t p, vector<double>& output)
 {
 	output.clear();
@@ -223,12 +194,16 @@ int Utility::get_int_input(string prompt, int min, int max)
 
 double Utility::get_double_input(string prompt)
 {
-	string input = fl_input(prompt.c_str());
+	const char* input = fl_input(prompt.c_str());
+	if (input == NULL)
+			return -1;
 	double in;
 	while (!valid_double_input(input, in))
 	{
 		fl_alert("Invalid input. Please try again!\n\n");
 		input = fl_input(prompt.c_str());
+		if (input == NULL)
+			return -1;
 	}
 	return in;
 }

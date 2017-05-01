@@ -41,7 +41,7 @@ Browser_dialog::Browser_dialog(const char* title, vector<string> item, vector<st
 }
 */
 
-Browser_dialog::Browser_dialog(const char* title, vector<string> item, vector<string> _image_filename, vector<string> _details, vector<Fl_Callback*> CBfunction, void* _Dialog_Manager) : Fl_Window(500, 480, title), image_filename{_image_filename}, details(_details), vCB{CBfunction}, Dialog_Manager{_Dialog_Manager}
+Browser_dialog::Browser_dialog(const char* title, vector<string> item, vector<string> _image_filename, vector<string> _details, vector<Fl_Callback*>& CBfunction, void* _Dialog_Manager) : Fl_Window(500, 480, title), image_filename{_image_filename}, details(_details), vCB{CBfunction}, Dialog_Manager{_Dialog_Manager}
 {
 	begin();
 	callback(cancelCB, this);
@@ -70,6 +70,7 @@ void Browser_dialog::browserCB(Fl_Widget* w, void* p)
 {
 	Browser_dialog* bd = (Browser_dialog*) p;
 	int index = bd->browser->value();
+	bd->choice = index;
 	if (index == 0)
 	{
 		bd->buff->text("");

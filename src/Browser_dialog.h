@@ -19,7 +19,7 @@ class Browser_dialog : public Fl_Window
 {
 public:
 	//Browser_dialog(const char* title, vector<string> item, vector<string> _image_filename, vector<string> details, Fl_Callback* _CBfunction, void* _Dialog_Manager);
-	Browser_dialog(const char* title, vector<string> item, vector<string> _image_filename, vector<string> details, vector<Fl_Callback*> _CBfunction, void* _Dialog_Manager);
+	Browser_dialog(const char* title, vector<string> item, vector<string> _image_filename, vector<string> details, vector<Fl_Callback*>& _CBfunction, void* _Dialog_Manager);
 	Fl_Hold_Browser* browser;
 	Fl_Box* box;
 	Fl_Text_Buffer* buff;
@@ -31,7 +31,7 @@ public:
 	vector<string> image_filename;
 	vector<string> details;
 	//Fl_Callback* functionCB;
-	vector<Fl_Callback*> vCB;
+	vector<Fl_Callback*>& vCB;
 	void* Dialog_Manager;
 
 private:

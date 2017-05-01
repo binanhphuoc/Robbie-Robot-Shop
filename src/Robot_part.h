@@ -127,6 +127,7 @@ public:
 		string str;
 		load(ist);
 		ist >> max_energy; getline(ist, str);
+		ist >> power_available; getline(ist, str);
 	}
 	double get_max_energy() {return max_energy;}
 	double get_power() {return power_available;}
@@ -134,6 +135,7 @@ public:
 	{
 		save_part(ost);
 		ost << max_energy << endl;
+		ost << power_available << endl;
 	}
 };
 
