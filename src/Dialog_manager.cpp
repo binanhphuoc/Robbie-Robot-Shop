@@ -25,6 +25,28 @@ void Display_part_dialog::browserCB(Fl_Widget* w, void* p)
 /////-------------------End DISPLAY PART DIALOG----------------------
 ///////////////
 
+///////////////
+////	DISPLAY MODEL DIALOG
+///////////////
+
+/*
+Display_model_dialog::Display_model_dialog(View& v) : view(v)
+{
+	vCB.push_back(browserCB);
+	browser = new Browser_dialog("View Models", v.vector_all_model_title(), v.vector_all_model_image(), v.vector_all_model_details(), vCB, this);
+	Fl::run();
+}
+
+void Display_model_dialog::browserCB(Fl_Widget* w, void* p)
+{
+	Display_part_dialog* dialog = (Display_part_dialog*) p;
+	dialog->browser->hide();
+}
+*/
+
+///////////////
+/////-------------------End DISPLAY PART DIALOG----------------------
+///////////////
 
 ///////////////
 ////	CREATE PART DIALOG
@@ -138,6 +160,7 @@ Create_model_dialog::Create_model_dialog(Shop& sh, View& view) : shop{sh}, v{vie
 	vector<const char*> entry;
 	entry.push_back("Name: ");
 	entry.push_back("Model \nnumber: ");
+	entry.push_back("Image \nfilename: ");
 	
 	infoDialog = new Input_dialog("Create Robot Model", entry, vCB, this);
 	Fl::run();
@@ -150,6 +173,7 @@ void Create_model_dialog::infoDialogCB(Fl_Widget* w, void* p)
 
 	string name;
 	int model_number;
+	string image_filename;
 	
 	name = id->input.at(0)->value();
 	if (!Utility::valid_int_input(id->input.at(1)->value(), model_number))
@@ -158,9 +182,11 @@ void Create_model_dialog::infoDialogCB(Fl_Widget* w, void* p)
 		fl_message("Model number must contain only numbers. Please try again.");
 		return;
 	}
-	
+	image_filename = id->input.at(2)->value();
+
 	cd->name = name;
 	cd->model_number = model_number;
+	cd->image_filename = image_filename;
 	id->hide();
 	cd->browser = new Browser_dialog("Choose HEAD", cd->v.vector_all_part_title(HEAD), cd->v.vector_all_part_image(HEAD), cd->v.vector_all_part_details(HEAD), cd->vCB, cd);
 }
@@ -336,7 +362,7 @@ void Create_model_dialog::batteryDialogCB(Fl_Widget* w, void* p)
 			if (price == -1)
 				return;
 			
-			cd->shop.create_new_robot_model(cd->name, cd->model_number, price, cd->rp);
+			cd->shop.create_new_robot_model(cd->name, cd->model_number, cd->image_filename, price, cd->rp);
 			
 			fl_message("Robot model has been created successfully.\n");
 		}

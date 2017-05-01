@@ -37,6 +37,25 @@ public:
 
 //////------------------------------------------------------
 
+/////////////////
+//////		DISPLAY MODEL DIALOG
+/////////////////
+
+class Display_model_dialog
+{
+public:
+	Display_model_dialog(View& v);
+	Browser_dialog* browser;
+	View& view;
+	
+	vector<Fl_Callback*> vCB;
+
+	static void browserCB(Fl_Widget* w, void* p);
+};
+
+/////---------------------------------------------------------
+
+
 /////////////////////
 ///////		CREATE PART DIALOG
 /////////////////////
@@ -74,6 +93,7 @@ public:
 	vector<Robot_part*> rp;
 	string name;
 	int model_number;
+	string image_filename;
 	double price;
 	int handcount = 2;
 	int batterycount = 0;

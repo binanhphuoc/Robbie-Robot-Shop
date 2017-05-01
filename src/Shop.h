@@ -36,7 +36,7 @@ public:
 	/////-------End ROBOT PARTS------------------
 
 	///// ROBOT MODELS
-	void create_new_robot_model(string name, int model_number, double prince, vector<Robot_part*> parts);
+	void create_new_robot_model(string name, int model_number, string image_filename, double price, vector<Robot_part*> parts);
 	Robot_model* get_model(int i);
 	int get_model_size();
 	int remove_robot_model(int i);

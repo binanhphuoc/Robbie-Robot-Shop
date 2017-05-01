@@ -5,10 +5,11 @@
 #include <iostream>
 #include <fstream>
 
-Robot_model::Robot_model(string _name, int _model_number, double _price)
+Robot_model::Robot_model(string _name, int _model_number, string _image_filename, double _price)
 {
 	name = _name;
 	model_number = _model_number;
+	image_filename = _image_filename;
 	price = _price;
 }
 
@@ -58,6 +59,12 @@ int Robot_model::get_model_number()
 {
 	return model_number;
 }
+
+string Robot_model::get_image_filename()
+{
+	return image_filename;
+}
+
 
 double Robot_model::get_price()
 {
@@ -165,6 +172,7 @@ void Robot_model::save(ofstream& ost, vector<int> var)
 {
 	ost << name << endl;
 	ost << model_number << endl;
+	ost << image_filename << endl;
 	ost << price << endl;
 	for (int i = 0; i < var.size(); i++)
 		ost << var.at(i) << endl;

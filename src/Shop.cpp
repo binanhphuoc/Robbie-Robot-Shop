@@ -147,9 +147,9 @@ void Shop::load_part(ifstream& ist)
 ///////		ROBOT MODELS
 //////////////////////////////////////////
 
-void Shop::create_new_robot_model(string name, int model_number, double price, vector<Robot_part*> parts)
+void Shop::create_new_robot_model(string name, int model_number, string image_filename, double price, vector<Robot_part*> parts)
 {
-	Robot_model* model = new Robot_model(name, model_number, price);
+	Robot_model* model = new Robot_model(name, model_number, image_filename, price);
 	for (Robot_part* p : parts)
 	{
 		if (p->get_part() == TORSO)
@@ -269,6 +269,9 @@ void Shop::load_model(ifstream& ist)
 		int model_number;
 		ist >> model_number; getline(ist, str);
 		
+		string image_filename;
+		getline(ist, image_filename);
+
 		double price;
 		ist >> price; getline(ist, str);
 		
@@ -288,7 +291,7 @@ void Shop::load_model(ifstream& ist)
 			rp.push_back(robot_parts.at(part_number));
 		}
 	
-		create_new_robot_model(name, model_number, price, rp);
+		create_new_robot_model(name, model_number, image_filename, price, rp);
 		
 	}
 }

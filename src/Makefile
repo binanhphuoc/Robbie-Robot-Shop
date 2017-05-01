@@ -10,11 +10,20 @@ debug: exe
 
 rebuild: clean exe
 
-exe: controller.o view.o shop.o order.o robotmodel.o guiwin.o guimainwin.o utility.o main.o
-	$(CXX) $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o exe controller.o view.o shop.o order.o robotmodel.o guiwin.o guimainwin.o utility.o main.o $(LDFLAGS)
+exe: controller.o view.o shop.o order.o robotmodel.o guimainwin.o utility.o main.o dialogmanager.o browserdialog.o inputdialog.o
+	$(CXX) $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o exe controller.o view.o shop.o order.o robotmodel.o guimainwin.o utility.o main.o inputdialog.o dialogmanager.o browserdialog.o  $(LDFLAGS)
 
 main.o: main.cpp
 	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o main.o main.cpp
+
+dialogmanager.o: Dialog_manager.cpp Dialog_manager.h
+	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o dialogmanager.o Dialog_manager.cpp
+
+inputdialog.o: Input_dialog.cpp Input_dialog.h
+	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o inputdialog.o Input_dialog.cpp
+
+browserdialog.o: Browser_dialog.cpp Browser_dialog.h
+	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o browserdialog.o Browser_dialog.cpp
 
 guimainwin.o: GUI_MainWin.cpp GUI_MainWin.h controller.o utility.o
 	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o guimainwin.o GUI_MainWin.cpp
@@ -22,11 +31,8 @@ guimainwin.o: GUI_MainWin.cpp GUI_MainWin.h controller.o utility.o
 utility.o: Utility.cpp Utility.h Robot_part.h
 	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o utility.o Utility.cpp
 
-controller.o: Controller.cpp Controller.h view.o guiwin.o
+controller.o: Controller.cpp Controller.h view.o
 	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o controller.o Controller.cpp
-
-guiwin.o: GUI_Dialog.cpp GUI_Dialog.h
-	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o guiwin.o GUI_Dialog.cpp
 
 view.o: View.cpp View.h shop.o
 	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o view.o View.cpp

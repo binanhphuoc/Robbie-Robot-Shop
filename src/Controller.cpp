@@ -3,7 +3,6 @@
 #include "Shop.h"
 #include "View.h"
 #include "Controller.h"
-#include "GUI_Dialog.h"
 #include "GUI_MainWin.h"
 #include "Utility.h"
 #include "Dialog_manager.h"
