@@ -469,6 +469,36 @@ string View::display_customer(int i)
 	return result;
 }
 
+string View::display_customer_title(int i)
+{
+	string result;
+	Customer* c = shop.get_customer(i);
+	result = "";
+	result += c->get_name();
+	return result;
+}
+
+vector<string> View::vector_all_customer_details()
+{
+	vector<string> result;
+	for (int i = 0; i < shop.get_customer_size(); i++)
+	{
+		result.push_back(display_customer(i));
+	}
+	return result;
+	
+}
+
+vector<string> View::vector_all_customer_title()
+{
+	vector<string> result;
+	for (int i = 0; i < shop.get_customer_size(); i++)
+	{
+		result.push_back(display_customer_title(i));
+	}
+	return result;
+}
+
 Menu View::customers_menu()
 {
 	Menu menu;
@@ -541,7 +571,8 @@ string View::display_order(int i)
 	result += "Tax: $" + to_string(order->get_price().tax) + "\n";
 	result += "Shipping: $" + to_string(order->get_price().shipping) + "\n";
 	result += "Total: $" + to_string(order->get_price().subtotal+order->get_price().tax+order->get_price().shipping) + "\n";
-	result += "Status: " + to_string(order->get_status()) + "\n";
+	result += "Payment status: " + order->get_state_string(1) + "\n";
+	result += "Package status: " + order->get_state_string(2) + "\n";
 	return result;
 }
 

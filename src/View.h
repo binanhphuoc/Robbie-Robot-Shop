@@ -65,6 +65,9 @@ public:
 	/////	Customer
 	////////////
 	string display_customer(int i);
+	string display_customer_title(int i);
+	vector<string> vector_all_customer_details();
+	vector<string> vector_all_customer_title();
 	Menu customers_menu();
 	////////////
 	

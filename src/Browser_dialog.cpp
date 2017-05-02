@@ -80,6 +80,9 @@ void Browser_dialog::browserCB(Fl_Widget* w, void* p)
 	bd->buff->text(bd->details.at(index-1).c_str());
 	
 	//Image loading
+	if (bd->image_filename.size() <= 0)
+		return;
+
 	if (bd->box->image() != NULL)
 	{
 		delete (bd->box->image());

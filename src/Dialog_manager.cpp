@@ -3,6 +3,7 @@
 #include "Input_dialog.h"
 #include <FL/Fl.H>
 #include <iostream>
+#include <sstream>
 
 ////////////////////
 /////		LOGIN DIALOG
@@ -133,6 +134,7 @@ void Login_window::createloginCB(Fl_Widget* w, void* p)
 	Login_window* lw = (Login_window*) p;
 
 	lw->na = new New_account(lw->shop);
+	delete lw->na;
 }
 
 void Login_window::exitCB(Fl_Widget* w, void* p)
@@ -188,6 +190,26 @@ void Display_model_dialog::browserCB(Fl_Widget* w, void* p)
 ///////////////
 /////-------------------End DISPLAY PART DIALOG----------------------
 ///////////////
+
+/////////////////
+//////		CHOOSE MODEL DIALOG
+/////////////////
+
+Choose_model_dialog::Choose_model_dialog(View& v) : view(v)
+{
+	vCB.push_back(browserCB);
+	browser = new Browser_dialog("Choose Model", v.vector_all_model_title(), v.vector_all_model_image(), v.vector_all_model_details(), vCB, this);
+}
+
+void Choose_model_dialog::browserCB(Fl_Widget* w, void* p)
+{
+	Choose_model_dialog* cd = (Choose_model_dialog*) p;
+	
+	cd->choice = cd->browser->choice;
+	cd->browser->hide();
+}
+
+/////---------------------------------------------------------
 
 ///////////////
 ////	CREATE PART DIALOG
@@ -653,3 +675,87 @@ void Create_bc_dialog::passCB(Fl_Widget* w, void* p)
 }
 
 /////-----------------------------------------------------------------
+
+Create_order_dialog::Create_order_dialog(Shop& sh, View& v, int _sa) : shop(sh), view(v), sa(_sa)
+{
+	vCB.push_back(bdCB);
+	vCB.push_back(idCB);
+	vCB.push_back(mdCB);
+
+	vector<string> img_filename;
+	bd = new Browser_dialog("Choose Beloved Customer", view.vector_all_customer_title(), img_filename, view.vector_all_customer_details(), vCB, this);
+	Fl::run();
+}
+
+void Create_order_dialog::bdCB(Fl_Widget* w, void* p)
+{
+	Create_order_dialog* cd = (Create_order_dialog*) p;
+	Browser_dialog* bd = cd->bd;
+
+	cd->bc = bd->choice - 1;
+	if (cd->bc < 0)
+	{
+		fl_message("Please pick one.");
+		return;
+	}	
+	
+	vector<const char*> entry;
+	entry.push_back("Order \nnumber: ");
+
+	bd->hide();
+	cd->id = new Input_dialog("New order", entry, cd->vCB, cd);
+	
+}
+
+void Create_order_dialog::idCB(Fl_Widget* w, void* p)
+{
+	Create_order_dialog* cd = (Create_order_dialog*) p;
+	Input_dialog* id = cd->id;
+	
+	if (!Utility::valid_int_input(id->input.at(0)->value(), cd->order_number))
+	{
+		fl_message_title("Message");
+		fl_message("Please enter a number.");
+		return;
+	}
+
+	id->hide();
+	
+	cd->md = new Browser_dialog("Choose model", cd->view.vector_all_model_title(), cd->view.vector_all_model_image(), cd->view.vector_all_model_details(), cd->vCB, cd);
+}
+
+void Create_order_dialog::mdCB(Fl_Widget* w, void* p)
+{
+	Create_order_dialog* cd = (Create_order_dialog*) p;
+	Browser_dialog* md = cd->md;
+	
+	cd->robot_model = md->choice - 1;
+	md->hide();
+
+	if (cd->robot_model < 0)
+	{
+		fl_message("Please pick one.");
+		return;
+	}
+	
+	//// Price
+	Robot_model* rm = cd->shop.get_model(cd->robot_model);
+
+	cd->price.subtotal = rm->get_price();
+	
+	stringstream ss; 
+	ss << "Subtotal: $" << cd->price.subtotal << endl;
+	cd->price.tax = cd->price.tax*cd->price.subtotal;	
+	ss << "Tax: $" << cd->price.tax << endl;
+	cd->price.shipping = 15 * rm->weight() / 100;
+	ss << "Tax: $" << cd->price.shipping << endl;
+	
+	string msg = ss.str();
+	fl_message(msg.c_str());
+
+	cd->shop.create_new_order(cd->order_number, rm, cd->price, cd->shop.get_sales_associate(cd->sa), cd->shop.get_customer(cd->bc));
+
+	fl_message("Order has been placed and is being processed.");
+}
+
+

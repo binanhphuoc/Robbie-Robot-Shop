@@ -70,7 +70,7 @@ public:
 	
 	///// ORDER
 	void create_new_order(int order_number,Robot_model* rm,Price price,Sales_associate* sa,Customer* c);
-	void create_new_order(int order_number, time_t date, Robot_model* rm,Price price,Sales_associate* sa,Customer* c, int status);
+	void create_new_order(int order_number, time_t date, Robot_model* rm,Price price,Sales_associate* sa,Customer* c, State_order status);
 	Order* get_order(int i);
 	int get_order_size();
 	int remove_order(int i);

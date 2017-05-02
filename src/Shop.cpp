@@ -479,7 +479,7 @@ void Shop::create_new_order(int order_number,Robot_model* rm,Price price,Sales_a
 	orders.push_back(order);
 }
 
-void Shop::create_new_order(int order_number, time_t date, Robot_model* rm,Price price,Sales_associate* sa,Customer* c, int status)
+void Shop::create_new_order(int order_number, time_t date, Robot_model* rm,Price price,Sales_associate* sa,Customer* c, State_order status)
 {
 	Order* order = new Order(order_number, date, price, sa, c, rm, status);
 	orders.push_back(order);
@@ -519,7 +519,8 @@ void Shop::save_order(ofstream& ost)
 		ost << findSA(c->get_sales_associate()) << endl;
 		ost << findBC(c->get_customer()) << endl;
 		ost << findModel(c->get_robot_model()) << endl;
-		ost << c->get_status() << endl;
+		ost << (int) c->get_state(1) << endl;
+		ost << (int) c->get_state(2) << endl;
 	}
 }
 
@@ -550,9 +551,13 @@ void Shop::load_order(ifstream& ist)
 		ist >> j; getline(ist, str);
 		Robot_model* rm = robot_models.at(j);
 
-		int status;
-		ist >> status; getline(ist,str);		
-		
+		State_order status;
+		int s1, s2;
+		ist >> s1; getline(ist,str);
+		ist >> s2; getline(ist,str);		
+		status.set(1, (state_enum) s1);
+		status.set(2, (state_enum) s2);
+
 		create_new_order(order_number, date, rm, price, sa, bc, status);
 	}
 }

@@ -99,6 +99,7 @@ GUI_MainWin::GUI_MainWin(int w, int h, const char* title, Controller& _c) : Fl_W
 				{ "&Exit", FL_ALT + FL_F + 4, main0, this},
 				{0},
 			{"&Create", 0, 0, 0, FL_SUBMENU},
+				{ "New &order", 0, main11, this},
 				{0},
 			{"&View", 0, 0, 0, FL_SUBMENU},
 				{ "Robot &Part", FL_ALT + 'p', main2, this},
@@ -150,4 +151,9 @@ void GUI_MainWin::main7(Fl_Widget* w, void* p)
 void GUI_MainWin::main9(Fl_Widget* w, void* p)
 {
 	((GUI_MainWin*)p)->c.main9();
+}
+
+void GUI_MainWin::main11(Fl_Widget* w, void* p)
+{
+	((GUI_MainWin*)p)->c.main11();
 }

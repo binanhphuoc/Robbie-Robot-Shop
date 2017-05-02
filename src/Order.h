@@ -6,6 +6,7 @@
 #include <string>
 #include <ctime>
 #include "Robot_model.h"
+#include "State.h"
 
 using namespace std;
 /*
@@ -39,12 +40,12 @@ class Order
 	Sales_associate* sales_associate;
 	Customer* customer;
 	Robot_model* robot_model;
-	int status = 0;
-	
+	State_order state;
 	
 public:
+
 	Order(int _order_number, Price _price, Sales_associate* _sales_associate, Customer* _customer, Robot_model* _robot_model/*, int _status*/);
-	Order(int _order_number, time_t _date, Price _price, Sales_associate* _sales_associate, Customer* _customer, Robot_model* _robot_model, int _status);
+	Order(int _order_number, time_t _date, Price _price, Sales_associate* _sales_associate, Customer* _customer, Robot_model* _robot_model, State_order s);
 	int get_order_number();
 	Price get_price();
 	string get_date();
@@ -52,8 +53,11 @@ public:
 	Sales_associate* get_sales_associate();
 	Robot_model* get_robot_model();
 	Customer* get_customer();
-	int get_status();
-	void set_status(int i);
+	
+	state_enum get_state(int path);
+	string get_state_string(int path);
+	void set_state(state_enum s1, state_enum s2);
+	void next_state(int path, event e);
 };
 
 #endif

@@ -105,6 +105,25 @@ public:
 
 /////---------------------------------------------------------
 
+/////////////////
+//////		CHOOSE MODEL DIALOG
+/////////////////
+
+class Choose_model_dialog
+{
+public:
+	Choose_model_dialog(View& v);
+	Browser_dialog* browser;
+	View& view;
+
+	int choice;	
+
+	vector<Fl_Callback*> vCB;
+
+	static void browserCB(Fl_Widget* w, void* p);
+};
+
+/////---------------------------------------------------------
 
 /////////////////////
 ///////		CREATE PART DIALOG
@@ -221,6 +240,38 @@ public:
 
 	static void infoCB(Fl_Widget* w, void* p);
 	static void passCB(Fl_Widget* w, void* p);
+	
+};
+
+/////---------------------------------------------------------
+
+/////////////////
+//////		CREATE NEW ORDER
+/////////////////
+
+class Create_order_dialog
+{
+public:
+	Create_order_dialog(Shop& sh, View& v, int sa);
+	Browser_dialog* bd;
+	Input_dialog* id;
+	Browser_dialog* md;
+	
+	Shop& shop;
+	View& view;
+	vector<Fl_Callback*> vCB;
+
+	int order_number;
+	int robot_model;
+	Price price;
+	int sa;
+	int bc;
+
+	///// Callbacks
+
+	static void bdCB(Fl_Widget* w, void* p);
+	static void idCB(Fl_Widget* w, void* p);
+	static void mdCB(Fl_Widget* w, void* p);
 	
 };
 

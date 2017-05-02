@@ -10,8 +10,8 @@ debug: exe
 
 rebuild: clean exe
 
-exe: controller.o view.o shop.o order.o robotmodel.o guimainwin.o utility.o main.o dialogmanager.o browserdialog.o inputdialog.o createaccountdialog.o logindialog.o
-	$(CXX) $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o exe controller.o view.o shop.o order.o robotmodel.o guimainwin.o utility.o main.o inputdialog.o dialogmanager.o browserdialog.o createaccountdialog.o logindialog.o $(LDFLAGS)
+exe: controller.o view.o shop.o order.o robotmodel.o guimainwin.o utility.o main.o dialogmanager.o browserdialog.o inputdialog.o createaccountdialog.o logindialog.o state.o
+	$(CXX) $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o exe controller.o view.o shop.o order.o robotmodel.o guimainwin.o utility.o main.o inputdialog.o dialogmanager.o browserdialog.o createaccountdialog.o logindialog.o state.o $(LDFLAGS)
 
 main.o: main.cpp
 	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o main.o main.cpp
@@ -48,6 +48,9 @@ shop.o: Shop.cpp Shop.h order.o
 
 order.o: Order.cpp Order.h Customer.h Sales_associate.h robotmodel.o
 	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o order.o Order.cpp
+
+state.o: State.cpp State.h
+	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o state.o State.cpp
 
 robotmodel.o: Robot_model.cpp Robot_model.h Robot_part.h
 	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o robotmodel.o Robot_model.cpp

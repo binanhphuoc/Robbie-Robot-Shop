@@ -32,9 +32,10 @@ void Controller::run(){
 	
 	while(true)
 	{
+		position = -1;
 		bool exit = false;
 		Login_window lw(shop, role, position, exit);
-	
+
 		if (exit)
 			return;
 	
@@ -262,6 +263,7 @@ void Controller::main10()
 
 void Controller::main11()
 {
+	/*
 	cout << "----------------------------------------" << endl;
 	cout << "	    CREATE NEW ORDER		 " << endl;
 	cout << "----------------------------------------" << endl;
@@ -314,6 +316,11 @@ void Controller::main11()
 
 	shop.create_new_order(order_number, rm, price, sa, c);
 	cout << "----------------------------------------" << endl;
+	*/
+	if (role != SA)
+		return;
+	Create_order_dialog* cd = new Create_order_dialog(shop, view, position);
+	delete cd;
 }
 
 void Controller::main12()
