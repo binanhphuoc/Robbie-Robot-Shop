@@ -38,6 +38,9 @@ public:
 	void main12();
 	//////
 
+	Role role = PB;
+	int position = -1;
+
 private:
 	Shop& shop;
 	View& view;

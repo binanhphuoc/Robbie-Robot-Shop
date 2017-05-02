@@ -4,6 +4,147 @@
 #include <FL/Fl.H>
 #include <iostream>
 
+////////////////////
+/////		LOGIN DIALOG
+////////////////////
+
+New_account::New_account(Shop& sh) : shop(sh)
+{
+	vCB.push_back(acceptAccountCB);
+	vCB.push_back(createAccountCB);
+	cd = new Create_account_dialog("Create new account", vCB, this, true);
+	Fl::run();
+}
+
+void New_account::acceptAccountCB(Fl_Widget* w, void* p)
+{	
+	New_account* na = (New_account*) p;
+	Create_account_dialog* cd = na->cd;
+	
+	string username = cd->username->value();
+	string password = cd->password->value();
+	string confirm = cd->confirm->value();
+
+	if (password != confirm || password == "" || username == "")
+	{
+		fl_message("Please confirm your password again.");
+		return;
+	}
+	
+	if (!Utility::valid_account(na->shop, username))
+	{
+		fl_message("This username has been taken. Please pick another username.");
+		return;
+	}
+	na->role = (Role) cd->role->value();
+	na->username = username;
+	na->password = password;
+
+	cd->hide();
+	
+	vector<const char*> entry;
+	if (na->role == BC)
+	{
+		entry.push_back("Name: ");
+		entry.push_back("Customer \nnumber: ");
+		entry.push_back("Phone \nnumber: ");
+		entry.push_back("Email \naddress: ");
+		na->infoDialog = new Input_dialog("Customer \ninformation", entry, na->vCB, na);
+	}
+	else if (na->role == SA)
+	{
+		entry.push_back("Name: ");
+		entry.push_back("Employee \nnumber: ");
+		na->infoDialog = new Input_dialog("Sales associate information", entry, na->vCB, na);
+	}
+}
+
+void New_account::createAccountCB(Fl_Widget* w, void* p)
+{
+	New_account* na = (New_account*) p;
+	Input_dialog* id = na->infoDialog;
+	
+	string name = id->input.at(0)->value();
+	string str_number = id->input.at(1)->value();
+	int number;
+
+	if (!Utility::valid_int_input(str_number, number))
+	{
+		fl_message("Invalid number. Please try again.");
+		return;
+	}
+	
+	string phone;
+	string email;
+
+	if (na->role == BC)
+	{
+		phone = id->input.at(2)->value();
+		email = id->input.at(3)->value();
+		na->shop.create_new_customer(name, number, phone, email, na->username, na->password);
+		fl_message("New account has been created successfully.");
+	}
+	else if (na->role == SA)
+	{
+		na->shop.create_new_sales_associate(name, number, na->username, na->password);
+		fl_message("New account has been saved. Please wait for us to validate your information. This may take hours.");
+	}
+	id->hide();
+}
+
+/////--------------------------------------------------------------
+
+///////////////
+////	LOGIN WINDOW
+///////////////
+
+Login_window::Login_window(Shop& sh, Role& r, int& _position, bool& _exit) : shop(sh), role{r}, position{_position}, exit{_exit}
+{
+	vector<Fl_Callback*> vCB;
+	vCB.push_back(loginCB);
+	vCB.push_back(createloginCB);
+	vCB.push_back(exitCB);
+	
+	ld = new Login_dialog(vCB, this);
+	Fl::run();
+}
+
+void Login_window::loginCB(Fl_Widget* w, void* p)
+{
+	Login_window* lw = (Login_window*) p;
+	Login_dialog* ld = lw->ld;
+
+	string username = ld->username->value();
+	string password = ld->password->value();
+	
+	if (!Utility::find_account(lw->shop, username, password, lw->role, lw->position))
+	{
+		fl_message_title("Message");
+		fl_message("We cannot recognize this account. \nPlease make sure that your username and password are correct.");
+		return;
+	}
+	ld->hide();
+	//lw->na->cd->hide();
+	//lw->na->infoDialog->hide();
+}
+
+void Login_window::createloginCB(Fl_Widget* w, void* p)
+{
+	Login_window* lw = (Login_window*) p;
+
+	lw->na = new New_account(lw->shop);
+}
+
+void Login_window::exitCB(Fl_Widget* w, void* p)
+{
+	Login_window* lw = (Login_window*) p;
+	
+	lw->exit = true;
+	lw->ld->hide();
+}
+
+////--------------------------------------------------------------
+
 ///////////////
 ////	DISPLAY PART DIALOG
 ///////////////
@@ -377,7 +518,7 @@ void Create_model_dialog::batteryDialogCB(Fl_Widget* w, void* p)
 ////		CREATE SALES ASSOCIATE
 ///////////////
 
-Create_sa_dialog::Create_sa_dialog(Shop& sh, Roll r) : shop(sh), roll(r)
+Create_sa_dialog::Create_sa_dialog(Shop& sh, Role r) : shop(sh), role(r)
 {
 	vector<const char*> item;
 	item.push_back("Name: ");
@@ -421,17 +562,94 @@ void Create_sa_dialog::passCB(Fl_Widget* w, void* p)
 		fl_message("Please confirm your password again.");
 		return;
 	}
+	if (!Utility::valid_account(cd->shop, dialog->username->value()))
+	{
+		fl_message("Username already taken. Please pick another.");
+		return;
+	}
 	
 	cd->username = dialog->username->value();
 	cd->password = password;
 
 	cd->shop.create_new_sales_associate(cd->name, cd->employee_number, cd->username, cd->password);
 	
-	if (cd->roll == PB)
+	if (cd->role == PB)
 		cd->shop.get_sales_associate(cd->shop.get_sales_associate_size() - 1)->set_active(true);
 
 	dialog->hide();
 	fl_message("Sales associate has been created.");
+}
+
+/////-----------------------------------------------------------------
+
+///////////////
+////		CREATE BELOVED CUSTOMER
+///////////////
+
+Create_bc_dialog::Create_bc_dialog(Shop& sh, Role r) : shop(sh), role(r)
+{
+	vector<const char*> item;
+	item.push_back("Name: ");
+	item.push_back("Customer \nnumber: ");
+	item.push_back("Phone \nnumber: ");
+	item.push_back("Email \naddress: ");
+
+	vCB.push_back(infoCB);
+	vCB.push_back(passCB);	
+
+	infoDialog = new Input_dialog("Create beloved customer", item, vCB, this);
+	Fl::run();
+}
+
+void Create_bc_dialog::infoCB(Fl_Widget* w, void* p)
+{
+	Create_bc_dialog* cd = (Create_bc_dialog*) p;
+	Input_dialog* dialog = cd->infoDialog;
+
+	int number;
+	if (!Utility::valid_int_input(dialog->input.at(1)->value(), number))
+	{
+		fl_message("Invalid model number.");
+		return;
+	}
+	
+	cd->name = dialog->input.at(0)->value();
+	cd->number = number;
+	cd->phone = dialog->input.at(2)->value();
+	cd->email = dialog->input.at(3)->value();
+
+	dialog->hide();
+	cd->passDialog = new Create_account_dialog("New beloved customer", cd->vCB, cd);
+}
+
+void Create_bc_dialog::passCB(Fl_Widget* w, void* p)
+{
+	Create_bc_dialog* cd = (Create_bc_dialog*) p;
+	Create_account_dialog* dialog = cd->passDialog;
+	
+	string password = dialog->password->value();
+	string confirm = dialog->confirm->value();
+	if (password != confirm)
+	{
+		fl_message("Please confirm your password again.");
+		return;
+	}
+	if (!Utility::valid_account(cd->shop, dialog->username->value()))
+	{
+		fl_message("Username already taken. Please pick another.");
+		return;
+	}
+	
+	cd->username = dialog->username->value();
+	cd->password = password;
+
+	cd->shop.create_new_customer(cd->name, cd->number, cd->phone, cd->email, cd->username, cd->password);
+	
+	if (cd->role == PB)
+		cd->shop.get_sales_associate(cd->shop.get_customer_size() - 1)->set_active(true);
+
+	dialog->hide();
+	fl_message("Beloved customer has been created.");
 }
 
 /////-----------------------------------------------------------------

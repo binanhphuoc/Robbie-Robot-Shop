@@ -8,12 +8,20 @@
 #include <string>
 #include <vector>
 
-Create_account_dialog::Create_account_dialog(string title, vector<Fl_Callback*>& _fxCB, void* _Dialog_manager) : Fl_Window(300, 50*3 + 60, title.c_str()), fxCB{_fxCB}, Dialog_manager{_Dialog_manager}
+Create_account_dialog::Create_account_dialog(string title, vector<Fl_Callback*>& _fxCB, void* _Dialog_manager, bool pickroll) : Fl_Window(300, 50*(pickroll?4:3) + 60, title.c_str()), fxCB{_fxCB}, Dialog_manager{_Dialog_manager}
 {
 	begin();
 
 	int y = -30;
-	
+
+	if (pickroll)
+	{
+		y += 50;
+		role = new Fl_Choice(120, y, 140, 30, "Role: ");
+		role->add("Beloved customer");
+		role->add("Sales associate");
+	}
+
 	y += 50;
 	username = new Fl_Input(120, y, 140, 30, "Username: ");
 	

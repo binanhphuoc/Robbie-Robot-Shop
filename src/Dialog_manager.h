@@ -7,6 +7,7 @@
 #include "Input_dialog.h"
 #include "Create_account_dialog.h"
 #include "Browser_dialog.h"
+#include "Login_dialog.h"
 #include "View.h"
 #include "Shop.h"
 #include <FL/Fl.H>
@@ -21,9 +22,52 @@
 using namespace std;
 
 ////////////////////
+/////		NEW ACCOUNT
+////////////////////
+
+class New_account
+{
+public:
+	New_account(Shop& sh);
+	Create_account_dialog* cd;
+	Input_dialog* infoDialog;
+
+	Role role;
+	string username;
+	string password;
+	Shop& shop;
+
+	vector<Fl_Callback*> vCB;
+
+	static void acceptAccountCB(Fl_Widget* w, void* p);
+	static void createAccountCB(Fl_Widget* w, void* p);
+};
+
+/////--------------------------------------------------------------
+
+////////////////////
 /////		LOGIN DIALOG
 ////////////////////
 
+class Login_window
+{
+public:
+	Login_window(Shop& sh, Role& r, int& position, bool& exit);
+	Login_dialog* ld;
+	New_account* na;
+
+	bool& exit;
+	int& position;
+	Shop& shop;
+	Role& role;
+	
+private:
+	static void loginCB(Fl_Widget* w, void* p); 
+	static void createloginCB(Fl_Widget* w, void* p);
+	static void exitCB(Fl_Widget* w, void* p);
+};
+
+/////--------------------------------------------------------------
 
 ////////////////////
 ////		DISPLAY PART DIALOG
@@ -129,12 +173,12 @@ public:
 class Create_sa_dialog
 {
 public:
-	Create_sa_dialog(Shop& sh, Roll r);
+	Create_sa_dialog(Shop& sh, Role r);
 	Input_dialog* infoDialog;
 	Create_account_dialog* passDialog;
 	
 	Shop& shop;
-	Roll roll;
+	Role role;
 	vector<Fl_Callback*> vCB;
 
 	string name;
@@ -151,5 +195,35 @@ public:
 
 /////---------------------------------------------------------
 
+/////////////////
+//////		CREATE BELOVED CUSTOMER DIALOG
+/////////////////
+
+class Create_bc_dialog
+{
+public:
+	Create_bc_dialog(Shop& sh, Role r);
+	Input_dialog* infoDialog;
+	Create_account_dialog* passDialog;
+	
+	Shop& shop;
+	Role role;
+	vector<Fl_Callback*> vCB;
+
+	string name;
+	int number;
+	string phone;
+	string email;
+	string username;
+	string password;
+
+	///// Callbacks
+
+	static void infoCB(Fl_Widget* w, void* p);
+	static void passCB(Fl_Widget* w, void* p);
+	
+};
+
+/////---------------------------------------------------------
 
 #endif

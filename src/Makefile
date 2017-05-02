@@ -10,14 +10,23 @@ debug: exe
 
 rebuild: clean exe
 
-exe: controller.o view.o shop.o order.o robotmodel.o guimainwin.o utility.o main.o dialogmanager.o browserdialog.o inputdialog.o createaccountdialog.o
-	$(CXX) $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o exe controller.o view.o shop.o order.o robotmodel.o guimainwin.o utility.o main.o inputdialog.o dialogmanager.o browserdialog.o createaccountdialog.o $(LDFLAGS)
+exe: controller.o view.o shop.o order.o robotmodel.o guimainwin.o utility.o main.o dialogmanager.o browserdialog.o inputdialog.o createaccountdialog.o logindialog.o
+	$(CXX) $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o exe controller.o view.o shop.o order.o robotmodel.o guimainwin.o utility.o main.o inputdialog.o dialogmanager.o browserdialog.o createaccountdialog.o logindialog.o $(LDFLAGS)
 
 main.o: main.cpp
 	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o main.o main.cpp
 
+guimainwin.o: GUI_MainWin.cpp GUI_MainWin.h controller.o utility.o
+	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o guimainwin.o GUI_MainWin.cpp
+
+controller.o: Controller.cpp Controller.h view.o
+	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o controller.o Controller.cpp
+
 dialogmanager.o: Dialog_manager.cpp Dialog_manager.h
 	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o dialogmanager.o Dialog_manager.cpp
+
+logindialog.o: Login_dialog.cpp Login_dialog.h
+	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o logindialog.o Login_dialog.cpp
 
 createaccountdialog.o: Create_account_dialog.cpp Create_account_dialog.h
 	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o createaccountdialog.o Create_account_dialog.cpp
@@ -28,14 +37,8 @@ inputdialog.o: Input_dialog.cpp Input_dialog.h
 browserdialog.o: Browser_dialog.cpp Browser_dialog.h
 	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o browserdialog.o Browser_dialog.cpp
 
-guimainwin.o: GUI_MainWin.cpp GUI_MainWin.h controller.o utility.o
-	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o guimainwin.o GUI_MainWin.cpp
-
 utility.o: Utility.cpp Utility.h Robot_part.h
 	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o utility.o Utility.cpp
-
-controller.o: Controller.cpp Controller.h view.o
-	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o controller.o Controller.cpp
 
 view.o: View.cpp View.h shop.o
 	$(CXX) -c $(CXXFLAGS) $(fltk-config --use-images --cxxflags) -o view.o View.cpp

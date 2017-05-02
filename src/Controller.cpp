@@ -30,6 +30,12 @@ void Controller::run(){
 	int cmd;
 	load();
 	
+	bool exit = false;
+	Login_window lw(shop, role, position, exit);
+	
+	if (exit)
+		return;
+	
 	GUI_MainWin* main_win = new GUI_MainWin(400, 300, "Robbie Robot Shop", *this);
 
 	//Fl::run();
@@ -154,22 +160,11 @@ bool Controller::check_available()
 
 void Controller::main4()
 {
-	//cout << "------------------------CREATE NEW ROBOT MODEL----------------------------" << endl;
 	if (!check_available())
 	{
 		return;
 	}
 
-/*
-	vector<const char*> entry;
-	entry.push_back("Name: ");
-	entry.push_back("Model \nnumber: ");
-	//string name = Utility::get_string_input("Name: ");
-	//int model_number = Utility::get_int_input("Model number: ");
-	
-	Input_win* input_win = new Input_win(300, 170, "Create Robot Model", entry, shop, view, MODEL);
-	//cout << "----------------------------------------------------" << endl;	
-*/
 	Create_model_dialog md(shop, view);
 
 }
@@ -177,20 +172,6 @@ void Controller::main4()
 void Controller::main2()
 {
 	Display_part_dialog dp(view);
-/*
-	Fl_Window* win_temp = new Fl_Window{300, 350, "Robot Parts List"};
-	win_temp->callback([](Fl_Widget* w, void* p){w->hide();});
-	//Fl_Box* whitebox = new Fl_Box(0,0,200,200);
-	Fl_Text_Buffer *buff = new Fl_Text_Buffer();
-    	Fl_Text_Display *disp = new Fl_Text_Display(5, 5, 290, 340);
-    	disp->buffer(buff);
-	buff->text(view.all_parts().c_str());
-	win_temp->resizable(*disp);
-	win_temp->end();
-	win_temp->show();
-*/
-	//fl_message_title("ALL ROBOT PARTS");
-	//fl_message(view.all_parts().c_str());
 }
 
 void Controller::main3()
@@ -206,19 +187,6 @@ void Controller::main3()
 
 void Controller::main5()
 {
-	/*
-	Fl_Window* win_temp = new Fl_Window{300, 350, "Robot Models Catalog"};
-	win_temp->callback([](Fl_Widget* w, void* p){w->hide();});
-	Fl_Box* whitebox = new Fl_Box(0,0,200,200);
-	Fl_Text_Buffer *buff = new Fl_Text_Buffer();
-    	Fl_Text_Display *disp = new Fl_Text_Display(5, 5, 290, 340);
-    	disp->buffer(buff);
-	buff->text(view.all_models().c_str());
-	win_temp->resizable(*disp);
-	win_temp->end();
-	win_temp->show();
-	*/
-	
 	Display_model_dialog dmd(view);
 }
 
@@ -231,6 +199,7 @@ void Controller::main6()
 
 void Controller::main7()
 {
+/*
 	cout << "----------------------------------------" << endl;
 	cout << "	    CREATE NEW CUSTOMER		 " << endl;
 	cout << "----------------------------------------" << endl;
@@ -240,7 +209,10 @@ void Controller::main7()
 	string email_address = Utility::get_string_input("Email address: ");
 	
 	shop.create_new_customer(name, customer_number, phone_number, email_address);
+*/
 
+	Create_bc_dialog* cd = new Create_bc_dialog(shop, PB);
+	delete cd;
 }
 
 void Controller::main8()
@@ -271,6 +243,7 @@ void Controller::main9()
 	shop.create_new_sales_associate(name, employee_number);
 */
 	Create_sa_dialog* cd = new Create_sa_dialog(shop, PB);
+	delete cd;
 }
 
 void Controller::main10()

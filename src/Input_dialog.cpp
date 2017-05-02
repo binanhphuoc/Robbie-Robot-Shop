@@ -24,7 +24,7 @@ Input_dialog::Input_dialog(const char* title, vector<const char*> entry, vector<
 	
 	create = new Fl_Button(70, y, 70, 30, "Create");
 	create->callback(fxCB.at(0), Dialog_manager);
-	fxCB.erase(fxCB.begin());	
+	fxCB.erase(fxCB.begin());
 
 
 	cancel = new Fl_Button(160, y, 70, 30, "Cancel");

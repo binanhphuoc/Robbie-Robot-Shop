@@ -9,8 +9,6 @@
 #include <FL/Fl_JPEG_Image.H>
 #include "Controller.h"
 
-void run_main_win(int w, int h, const char* title, Controller& _c);
-
 class GUI_MainWin : public Fl_Window
 {
 public:

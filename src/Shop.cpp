@@ -304,9 +304,9 @@ void Shop::load_model(ifstream& ist)
 /////	CUSTOMER
 /////////////////
 
-void Shop::create_new_customer(string name, int customer_number, string phone_number, string email_address)
+void Shop::create_new_customer(string name, int customer_number, string phone_number, string email_address, string username, string password)
 {
-	customers.push_back(new Customer(name, customer_number, phone_number, email_address));
+	customers.push_back(new Customer(name, customer_number, phone_number, email_address, username, password));
 }
 
 Customer* Shop::get_customer(int i)
@@ -347,7 +347,9 @@ void Shop::save_customer(ofstream& ost)
 		ost << c->get_name() << endl;
 		ost << c->get_customer_number() << endl;
 		ost << c->get_phone_number() << endl;
-		ost << c->get_email_address() << endl;	
+		ost << c->get_email_address() << endl;
+		ost << c->get_username() << endl;
+		ost << c->get_password() << endl;	
 	}
 }
 
@@ -369,7 +371,13 @@ void Shop::load_customer(ifstream& ist)
 		string email_address;
 		getline(ist, email_address);
 	
-		create_new_customer(name, customer_number, phone_number, email_address);
+		string username;
+		getline(ist, username);	
+		
+		string password;
+		getline(ist, password);			
+
+		create_new_customer(name, customer_number, phone_number, email_address, username, password);
 		
 	}
 }

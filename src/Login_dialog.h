@@ -4,9 +4,12 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Input.H>
+#include <FL/Fl_Return_Button.H>
 #include <FL/Fl_Secret_Input.H>
 #include <FL/Fl_Output.H>
 #include <FL/Fl_Button.H>
+#include <FL/Fl_Box.H>
+#include <FL/Fl_Choice.H>
 #include <string>
 #include <vector>
 
@@ -19,14 +22,14 @@ public:
 	Fl_Box* box;
 	Fl_Input* username;
 	Fl_Secret_Input* password;
-	Fl_Button* create;
-	Fl_Button* cancel;
+	Fl_Return_Button* login;
+	Fl_Button* quit;
+	Fl_Button* create_account;
 	void* Dialog_manager;
 	vector<Fl_Callback*>& fxCB;
 
 private:
-	static void cb_cancel(Fl_Widget* w, void* p);
-
+	static void quitCB(Fl_Widget* w, void* p);
 };
 
 #endif

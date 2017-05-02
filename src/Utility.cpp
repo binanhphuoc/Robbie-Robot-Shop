@@ -275,6 +275,65 @@ int Utility::check_image(string filename)
 	return 0;
 }
 
+bool Utility::valid_account(Shop& shop, string username)
+{
+	if (username == "pointedhairedboss")
+		return false;
+	if (username == "productmanager")
+		return false;
+	for (int i = 0; i < shop.get_sales_associate_size(); i++)
+	{
+		if (username == shop.get_sales_associate(i)->get_username())
+			return false;
+	}
+	for (int i = 0; i < shop.get_customer_size(); i++)
+	{
+		if (username == shop.get_customer(i)->get_username())
+			return false;
+	}
+	return true;
+}
+
+bool Utility::find_account(Shop& shop, string username, string password, Role& role, int& position)
+{
+	if (username == "" || password == "")
+		return false;
+	if (username == "pointedhairedboss" && password == "pointedhairedboss")
+	{
+		role = PB;
+		position = -1;
+		return true;
+	}
+	if (username == "productmanager" && password == "productmanager")
+	{
+		role = PM;
+		position = -1;
+		return true;
+	}
+	
+	for (int i = 0; i < shop.get_sales_associate_size(); i++)
+	{
+		if (username == shop.get_sales_associate(i)->get_username() && password == shop.get_sales_associate(i)->get_password() && shop.get_sales_associate(i)->get_active())
+		{
+			role = SA;
+			position = i;
+			return true;
+		}
+	}
+
+	for (int i = 0; i < shop.get_customer_size(); i++)
+	{
+		if (username == shop.get_customer(i)->get_username() && password == shop.get_customer(i)->get_password() && shop.get_customer(i)->get_active())
+		{
+			role = BC;
+			position = i;	
+			return true;
+		}
+	}
+	
+	return false;
+}
+
 ////////////////////
 ///-----------------------------------End UTILITY------------------------
 ////////////////////

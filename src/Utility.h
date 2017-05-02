@@ -3,6 +3,7 @@
 
 #include "View.h"
 #include <string>
+#include "Shop.h"
 #include <vector>
 #include <FL/Fl.H>
 #include <FL/Fl_Shared_Image.H>
@@ -33,6 +34,9 @@ public:
 	static void scale_image(Fl_Box* box, Fl_JPEG_Image* img);
 	static void scale_image(Fl_Box* box, Fl_PNG_Image* img);
 	static int check_image(string filename);
+
+	static bool valid_account(Shop& shop, string username);
+	static bool find_account(Shop& shop, string username, string password, Role& role, int& position);
 };
 
 #endif

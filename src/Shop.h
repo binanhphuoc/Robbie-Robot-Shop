@@ -11,7 +11,7 @@
 #include <iostream>
 #include <fstream>
 
-enum Roll{PM, BC, SA, PB};
+enum Role{BC, SA, PM, PB};
 
 using namespace std;
 
@@ -49,7 +49,7 @@ public:
 	/////-----------End ROBOT MODELS-------------
 
 	///// CUSTOMERS
-	void create_new_customer(string name, int customer_number, string phone_number, string email_address);
+	void create_new_customer(string name, int customer_number, string phone_number, string email_address, string username, string password);
 	Customer* get_customer(int i);
 	int get_customer_size();
 	int remove_customer(int i);
