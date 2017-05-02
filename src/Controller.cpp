@@ -30,13 +30,16 @@ void Controller::run(){
 	int cmd;
 	load();
 	
-	bool exit = false;
-	Login_window lw(shop, role, position, exit);
+	while(true)
+	{
+		bool exit = false;
+		Login_window lw(shop, role, position, exit);
 	
-	if (exit)
-		return;
+		if (exit)
+			return;
 	
-	GUI_MainWin* main_win = new GUI_MainWin(400, 300, "Robbie Robot Shop", *this);
+		GUI_MainWin* main_win = new GUI_MainWin(400, 300, "Robbie Robot Shop", *this);
+	}
 
 	//Fl::run();
 	

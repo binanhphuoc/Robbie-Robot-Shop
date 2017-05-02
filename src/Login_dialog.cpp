@@ -1,10 +1,16 @@
 #include "Login_dialog.h"
+#include <FL/Fl_JPEG_Image.H>
+#include <FL/Fl_PNG_Image.H>
 
 Login_dialog::Login_dialog(vector<Fl_Callback*>& _fxCB, void* _Dialog_manager) : Fl_Window(400, 100+50*5, "Welcome to Robbie Robot Shop"), fxCB{_fxCB}, Dialog_manager{_Dialog_manager}
 {
 	begin();
 	
 	callback(fxCB.at(2), Dialog_manager);	
+
+	Fl_Box* box2 = new Fl_Box(0, 0, 400, 50*5);
+	Fl_PNG_Image* img = new Fl_PNG_Image("Robot_Images/head_antennaeless.png");
+	box2->image(img);
 
 	box = new Fl_Box(0, 0, 400, 100);
 	box->label(_FL_ENGRAVED_LABEL, "ROBBIE ROBOT SHOP");
