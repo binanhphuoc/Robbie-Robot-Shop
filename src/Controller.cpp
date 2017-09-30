@@ -28,10 +28,9 @@ using namespace std;
 void Controller::run(){
 
 	int cmd;
-	load();
 	
-	while(true)
-	{
+	
+		load();
 		position = -1;
 		bool exit = false;
 		Login_window lw(shop, role, position, exit);
@@ -40,7 +39,9 @@ void Controller::run(){
 			return;
 	
 		GUI_MainWin* main_win = new GUI_MainWin(400, 300, "Robbie Robot Shop", *this);
-	}
+		delete main_win;
+		main0();
+	
 
 	//Fl::run();
 	
@@ -49,7 +50,8 @@ void Controller::run(){
 ////// Save and Load
 void Controller::save()
 {
-	ofstream ost("data.txt");
+	ofstream ost;
+	ost.open("data.txt", std::ofstream::out | std::ofstream::trunc);
 	if (ost.is_open())
 	{
 		shop.save_part(ost);
@@ -115,7 +117,6 @@ void Controller::main0()
 	{
 		shop.remove_sales_associate(i);
 	}
-	
 }
 
 

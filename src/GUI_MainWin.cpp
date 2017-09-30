@@ -119,7 +119,7 @@ GUI_MainWin::GUI_MainWin(int w, int h, const char* title, Controller& _c) : Fl_W
 
 void GUI_MainWin::main0(Fl_Widget* w, void* p)
 {
-	((GUI_MainWin*)p)->c.main0();
+	//((GUI_MainWin*)p)->c.main0();
 	((GUI_MainWin*)p)->hide();
 }
 
